@@ -11,7 +11,7 @@ export type FormCallback<S extends object, R extends object> = (form: Observable
 export type FormHandler<S extends object, R extends object> = (form: ObservableForm<S, R>) => Promise<any> | any
 export type FormValidateOptions = { changedFieldsOnly?: boolean }
 export type FormSubmitOptions = { validate?: boolean }
-
+export type FormErrorsCallback<S extends object> = (newState: S|undefined) => void
 
 export type FormConfig<S extends object, R extends object> = {
   validators: FormValidator<S, R>[]
@@ -50,7 +50,7 @@ export interface ObservableErrors {
   hasAt(path: string | string[]): boolean
   clearAt(path: string | string[]): void
 
-  listen(callback: StoreCallback<ValidationResult>, notifyImmediately?: boolean): void
+  listen(callback: FormErrorsCallback<ValidationResult>, notifyImmediately?: boolean): void
 }
 
 export interface ObservableFormData<S extends object> {

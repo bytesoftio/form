@@ -288,7 +288,7 @@ describe("Form", () => {
 
     expect(status).toBe(false)
     expect(handler).not.toHaveBeenCalled()
-    expect(errors).toEqual([{}, { foo: ["error"] }])
+    expect(errors).toEqual([undefined, { foo: ["error"] }])
     expect(submitting).toEqual([false, true, false])
     expect(submitted).toEqual([false])
   })
@@ -319,7 +319,7 @@ describe("Form", () => {
 
     expect(status).toBe(true)
     expect(handler).toHaveBeenCalled()
-    expect(errors).toEqual([{}])
+    expect(errors).toEqual([undefined])
     expect(submitting).toEqual([false, true, false])
     expect(submitted).toEqual([false, true])
   })

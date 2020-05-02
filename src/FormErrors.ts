@@ -1,6 +1,6 @@
-import { ObservableErrors } from "./types"
+import { FormErrorsCallback, ObservableErrors } from "./types"
 import { ValidationResult } from "@bytesoftio/schema"
-import { createStore, ObservableStore, StoreCallback } from "@bytesoftio/store"
+import { createStore, ObservableStore } from "@bytesoftio/store"
 import { get, isArray, keys } from "lodash"
 
 export class FormErrors implements ObservableErrors {
@@ -17,17 +17,17 @@ export class FormErrors implements ObservableErrors {
   get(): ValidationResult | undefined | any {
     const errors = this.state.get()
 
-    if (keys(errors).length === 0) {
+    if (this.isEmptyErrorsObject(errors)) {
       return undefined
     }
 
     return errors
   }
 
-  getAt(path: string): any | undefined {
+  getAt(path: string): string[] | undefined {
     const errors = get(this.state.get(), path)
 
-    if ( ! errors || errors.length === 0) {
+    if (this.isEmptyErrorsArray(errors)) {
       return undefined
     }
 
@@ -92,7 +92,17 @@ export class FormErrors implements ObservableErrors {
     this.state.reset()
   }
 
-  listen(callback: StoreCallback<ValidationResult>, notifyImmediately?: boolean): void {
-    this.state.listen(callback, undefined, notifyImmediately)
+  listen(callback: FormErrorsCallback<ValidationResult>, notifyImmediately?: boolean): void {
+    const wrappedCallback = (errors: ValidationResult) => callback(this.isEmptyErrorsObject(errors) ? undefined : errors)
+
+    this.state.listen(wrappedCallback, undefined, notifyImmediately)
+  }
+
+  protected isEmptyErrorsObject(errors: object|undefined): boolean {
+    return ! errors || keys(errors).length === 0
+  }
+
+  protected isEmptyErrorsArray(errors: any[]|undefined): boolean {
+    return ! errors || errors.length === 0
   }
 }
