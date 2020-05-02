@@ -1,7 +1,4 @@
-import React from "react"
 import { FormFields } from "./FormFields"
-import { mount } from "enzyme"
-import { act } from "react-dom/test-utils"
 
 describe("FormFields", () => {
   it("returns and sets form fields", () => {
@@ -69,28 +66,7 @@ describe("FormFields", () => {
     expect(fields.get()).toEqual([])
   })
 
-  it("hooks inside react", async () => {
-    const fields = new FormFields()
-
-    const Test = () => {
-      const [value] = fields.use()
-
-      return (
-        <h1>{value.length}</h1>
-      )
-    }
-
-    const wrapper = mount(<Test/>)
-    const target = () => wrapper.find("h1")
-
-    expect(target().text()).toBe("0")
-
-    act(() => fields.add("foo"))
-
-    expect(target().text()).toBe("1")
-  })
-
-  it("hooks outside react", () => {
+  it("listens to changes", () => {
     const fields = new FormFields(["foo"])
     const callback = jest.fn()
 

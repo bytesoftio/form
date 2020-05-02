@@ -1,7 +1,4 @@
-import React from "react"
 import { FormErrors } from "./FormErrors"
-import { mount } from "enzyme"
-import { act } from "react-dom/test-utils"
 
 describe("FormErrors", () => {
   it("returns and sets errors", () => {
@@ -101,28 +98,7 @@ describe("FormErrors", () => {
     expect(errors.get()).toEqual({ baz: ["boink"] })
   })
 
-  it("hooks inside react", async () => {
-    const errors = new FormErrors({ foo: [] })
-
-    const Test = () => {
-      const [value] = errors.use()
-
-      return (
-        <h1>{value.foo.length}</h1>
-      )
-    }
-
-    const wrapper = mount(<Test/>)
-    const target = () => wrapper.find("h1")
-
-    expect(target().text()).toBe("0")
-
-    act(() => errors.addAt("foo", "baz"))
-
-    expect(target().text()).toBe("1")
-  })
-
-  it("hooks outside react", () => {
+  it("listens to changes", () => {
     const errors = new FormErrors({ foo: ["bar"] })
     const callback = jest.fn()
 

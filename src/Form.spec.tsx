@@ -1,10 +1,7 @@
-import React from "react"
 import { Form } from "./Form"
 import { object, string } from "@bytesoftio/schema"
 import { isString } from "lodash"
-import { mount } from "enzyme"
 import { createTimeout } from "@bytesoftio/helpers-promises"
-import { act } from "react-dom/test-utils"
 
 describe("Form", () => {
   it("creates with initial state", () => {
@@ -386,85 +383,5 @@ describe("Form", () => {
 
     expect(listener).toHaveBeenCalledTimes(10)
     expect(listener).toHaveBeenCalledWith(form)
-  })
-
-
-  it("uses", async () => {
-    const form = new Form({ foo: "bar" })
-    let changes = 0
-
-    const Test = () => {
-      const [state, errors, loading] = form.use()
-      changes++
-
-      return (
-        <h1>{JSON.stringify(state)},{errors === undefined ? "undefined" : JSON.stringify(errors)},{JSON.stringify(loading)}</h1>
-      )
-    }
-
-    const wrapper = mount(<Test/>)
-    const target = () => wrapper.find("h1")
-
-    expect(changes).toBe(1)
-    expect(target().text()).toBe(`{"foo":"bar"},undefined,false`)
-
-    act(() => form.data.setAt("foo", "yolo"))
-
-    expect(changes).toBe(2)
-    expect(target().text()).toBe(`{"foo":"yolo"},undefined,false`)
-  })
-
-  it("hooks dirty fields", async () => {
-    const form = new Form({})
-    let changes = 0
-
-    const Test = () => {
-      form.use()
-      changes++
-
-      return (
-        <div>
-          <h1>{form.dirtyFields.get().length}</h1>
-        </div>
-      )
-    }
-
-    const wrapper = mount(<Test/>)
-    const target = () => wrapper.find("h1")
-
-    expect(changes).toBe(1)
-    expect(target().text()).toBe("0")
-
-    act(() => form.dirtyFields.add(["foo"]))
-
-    expect(changes).toBe(2)
-    expect(target().text()).toBe("1")
-  })
-
-  it("hooks changed fields", async () => {
-    const form = new Form({})
-    let changes = 0
-
-    const Test = () => {
-      form.use()
-      changes++
-
-      return (
-        <div>
-          <h1>{form.changedFields.get().length}</h1>
-        </div>
-      )
-    }
-
-    const wrapper = mount(<Test/>)
-    const target = () => wrapper.find("h1")
-
-    expect(changes).toBe(1)
-    expect(target().text()).toBe("0")
-
-    act(() => form.changedFields.add(["foo"]))
-
-    expect(changes).toBe(2)
-    expect(target().text()).toBe("1")
   })
 })

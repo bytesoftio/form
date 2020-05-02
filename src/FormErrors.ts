@@ -1,10 +1,10 @@
-import { HookFormErrors } from "./types"
+import { ObservableErrors } from "./types"
 import { ValidationResult } from "@bytesoftio/schema"
-import { createStore, HookStore, StoreCallback, StoreSpread } from "@bytesoftio/use-store"
+import { createStore, ObservableStore, StoreCallback } from "@bytesoftio/store"
 import { get, isArray, keys } from "lodash"
 
-export class FormErrors implements HookFormErrors {
-  state: HookStore<ValidationResult>
+export class FormErrors implements ObservableErrors {
+  state: ObservableStore<ValidationResult>
 
   constructor(initialState?: ValidationResult) {
     this.state = createStore({})
@@ -92,11 +92,7 @@ export class FormErrors implements HookFormErrors {
     this.state.reset()
   }
 
-  listen(callback: StoreCallback<ValidationResult>): void {
-    this.state.listen(callback)
-  }
-
-  use(): StoreSpread<ValidationResult, ValidationResult> {
-    return this.state.use()
+  listen(callback: StoreCallback<ValidationResult>, notifyImmediately?: boolean): void {
+    this.state.listen(callback, undefined, notifyImmediately)
   }
 }

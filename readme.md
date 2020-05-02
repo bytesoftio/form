@@ -1,8 +1,8 @@
-# @bytesoftio/use-form
+# @bytesoftio/form
 
 ## Installation
 
-`yarn add @bytesoftio/use-form` or `npm install @bytesoftio/use-form`
+`yarn add @bytesoftio/form` or `npm install @bytesoftio/form`
 
 ## Table of contents
 
@@ -20,14 +20,14 @@
 - [Reset form state](#reset-form-state)
 - [Dirty fields and changed fields](#dirty-fields-and-changed-fields)
 - [Status indicators](#status-indicators)
-- [Form hooks and bindings](#form-hooks-and-bindings)
+- [Usage with React](#usage-with-react)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Description
 
 This package provides a very convenient abstraction for forms. I never liked the idea of forms being
-defined and handled entirely inside React components, so I came up with this approach.
+defined and handled entirely inside the presentation layer, so I came up with this approach.
 
 A form should be a first class citizen inside a project, kinda like a service. It should:
 
@@ -99,7 +99,7 @@ const createUser = async (data: CreateUserForm): Promise<User> => ({ id: 1, ...d
 ```ts
 // form.ts
 
-import { createForm } from "@bytesoftio/use-form/src"
+import { createForm } from "@bytesoftio/form"
 import { object, string } from "@bytesoftio/schema"
 import { CreateUserForm, CreateUserResult } from "./types"
 import { createUser } from "./api.ts"
@@ -130,34 +130,37 @@ export const createUserForm = () => {
 }
 ```
 
+The [@bytesoftio/use-form](https://github.com/bytesoftio/use-form) package should be used to consume forms in React.
+
 ```tsx
 // component.tsx
 
 import React from "react"
 import { useForm } from "@bytesoftio/use-form"
-import { createUserForm } from "./form.ts"
+import { createUserForm } from "./form"
 
 const CreateUserForm = () => {
   // create a new form instance and consume it for proper re-renders when state changes
-  const form = useForm(createUserForm)
+  // also returns a binding untility to connect input elements with form values
+  const [form, bind] = useForm(createUserForm)
   // grab what you need from various state objects
   const [errors, result] = [form.errors, form.result.get()]
 
   return (
-    <form {...form.bind.form()}>
+    <form {...bind.form()}>
       <div>{result?.success || result?.error }</div>
 
       <div>
-        <input {...form.bind.input("firstName")} placeholder="First name"/>
+        <input {...bind.input("firstName")} placeholder="First name"/>
         <div>{errors.getAt("firstName")}</div>
       </div>
 
       <div>
-        <input {...form.bind.input("lastName")} placeholder="Last name"/>
+        <input {...bind.input("lastName")} placeholder="Last name"/>
         <div>{errors.getAt("lastName")}</div>
       </div>
 
-      <button {...form.bind.button()}>Create</button>
+      <button {...bind.button()}>Create</button>
     </form>
   )
 }
@@ -168,7 +171,7 @@ const CreateUserForm = () => {
 Form behaviour can be altered through several config options:
 
 ```ts
-import { createForm } from "@bytesoftio/use-form"
+import { createForm } from "@bytesoftio/form"
 
 const form = createForm({})
 	.configure({
@@ -187,7 +190,7 @@ const form = createForm({})
 All the form data is stored inside the `form.data` object. It comes with a few convenient helper methods.
 
 ```ts
-import { createForm } from "@bytesoftio/use-form"
+import { createForm } from "@bytesoftio/form"
 
 const initialState = { field1: "", field2: "", field3: "" }
 const form = createForm(initialState)
@@ -219,12 +222,12 @@ form.data.hasAt("path.to.field")
 
 ## Validation logic
 
-Form can be validated in several ways. Mostly you'll want to use the `schema` method. It takes as schema description object produced by the `@bytesoftio/schema` package. But it is also possible to provide a custom validation function.
+Form can be validated in several ways. Mostly you'll want to use the `schema` method. It takes as schema description object produced by the [@bytesoftio/schema](https://github.com/bytesoftio/schema) package. But it is also possible to provide a custom validation function.
 
-Lets take a look at the custom validate function first. A validation function can be `sync` or `async` and must return either `undefined` / nothing in case of a successful validation, or an error object of type `ValidationResult` that you can find in the `@bytesoftio/schema` package.
+Lets take a look at the custom validate function first. A validation function can be `sync` or `async` and must return either `undefined` / nothing in case of a successful validation, or an error object of type `ValidationResult` that you can find in the [@bytesoftio/schema](https://github.com/bytesoftio/schema) package.
 
 ```tsx
-import { createForm } from "@bytesoftio/use-form"
+import { createForm } from "@bytesoftio/form"
 
 const form = createForm({ 
   title: "", 
@@ -242,10 +245,10 @@ const form = createForm({
   })
 ```
 
-Additionaly it is possible to provide a validation schema powered by the very easy to use `@bytesoftio/schema` package.
+Additionaly it is possible to provide a validation schema powered by the very easy to use [@bytesoftio/schema](https://github.com/bytesoftio/schema) package.
 
 ```ts
-import { createForm } from "@bytesoftio/use-form"
+import { createForm } from "@bytesoftio/form"
 import { object, string } from "@bytesoftio/schema"
 
 const form = createForm({ 
@@ -260,10 +263,10 @@ const form = createForm({
 
 ## Validation and errors
 
-A form can be validated manually, before submission, using the `validate` method. The result is either `undefined`, in case of a successful validation, or an error object of type `ValidationResult`, from the `@bytesoftio/schema` package.
+A form can be validated manually, before submission, using the `validate` method. The result is either `undefined`, in case of a successful validation, or an error object of type `ValidationResult`, from the [@bytesoftio/schema](https://github.com/bytesoftio/schema) package.
 
 ```ts
-import { createForm } from "@bytesoftio/use-form"
+import { createForm } from "@bytesoftio/form"
 
 const form = createForm({})
 const errors = await form.validate()
@@ -286,6 +289,10 @@ When submitting a form, validations are run atomatically, unless configured othe
 You can access form errors anytime trough `form.errors` property. The errors object has many convenience method when dealing with errors.
 
 ```ts
+import { createForm } from "@bytesoftio/form"
+
+const form = createForm()
+
 // get all validation errors
 form.errors.get()
 
@@ -325,7 +332,7 @@ form.errors.clearAt(["path.to.field1", "path.to.field2"])
 To submit a form to an API you need to provide a form handler. This piece of logic is responsible for extracting form data, sending data to an endpoint, handling remote errors, providing meaningful feedback to the form consumers / presentation layer.
 
 ```ts
-import { createForm } from "@bytesoftio/use-form"
+import { createForm } from "@bytesoftio/form"
 
 const form = createForm()
 	.handler(async form => {
@@ -352,7 +359,7 @@ form.submit({ validate: false })
 You can reset all of the form state back to its initial value as well as all the errors, dirty fields, results, etc.
 
 ```ts
-import { createForm } from "@bytesoftio/use-form"
+import { createForm } from "@bytesoftio/form"
 
 const form = createForm({ field1: "foo", field2: "bar" })
 
@@ -369,10 +376,10 @@ form.reset({ field1: "", field2: ""})
 
 You can check if any specific field has been changed through user input. There is a differentiation between `diryFields` and `changedFields`. As soon as a form field has been changed, for example from `""` to `"foo"` - it becomes dirty. If the field changes back to `""`, it is still dirty. `changedFields` works slightly different. A field is changed only if the value is actually different from the initial one. So a field can be dirty and *not* changed at the same time.
 
-`dirtyFields` and  `changedFields` have both the same interface `HookFormFields`. 
+`dirtyFields` and  `changedFields` have both the same interface `ObservableFormFields`. 
 
 ```ts
-import { createForm } from "@bytesoftio/use-form"
+import { createForm } from "@bytesoftio/form"
 
 const form = createForm({})
 
@@ -405,7 +412,7 @@ Once again, the `form.changedFields` object is absolutely identical, in terms of
 
 ## Status indicators
 
-Sometimes you'll need a flag to tell if form is currently being submitted, or has already been submitted. In this case you can use one of these status objects: `form.submitting` or `form.submitted`. Both implement the `HookValue` interface that comes from the `@bytesoftio/use-value` package and has all the relevant docs.
+Sometimes you'll need a flag to tell if form is currently being submitted, or has already been submitted. In this case you can use one of these status objects: `form.submitting` or `form.submitted`. Both implement the `ObservableValue` interface that comes from the [@bytesoftio/value](https://github.com/bytesoftio/value) package and has all the relevant docs.
 
 ```ts
 // is form currently being submitted, returns boolean
@@ -414,45 +421,6 @@ form.submitting.get()
 form.submitted.get()
 ```
 
-## Form hooks and bindings
+## Usage with React
 
-For a React component to properly update upon form state changes, you must first hook the form up. There are several ways on how to consume forms in components.
-
-After consuming a form you must bind it to input fields. This library already ships with a very lightweight binder inside, but you can very easily roll your own binder for your specific ui library, like Antd for example.. Just take a look on how `FormBinder`  is written - its easy as cacke.
-
-Lets take a look on how to use hooks and bindings:
-
-```tsx
-import React from "react"
-import { createForm, useForm } from "@bytesoftio/use-form"
-
-const specialFormFactory = () => createForm()
-const sharedFormInstance = createForm()
-
-const Component = () => {
-  const formFromFactory = useForm(specialFormFactory)
-  const sharedForm = useForm(sharedFormInstance)
-  const formFromInlineFactory = useForm(() => createForm())
-  const inlineForm = useForm(inlineForm())
-  
-	return (
-    <form { ...form.bind.form() }>
-    	<input type="text" { ...form.bind.input("field1") } />
-    	
-      <input type="checkbox" { ...form.bind.checkbox("field2") } />
-      
-      <input type="radio" { ...form.bind.radio("field3", "value1") } />
-      <input type="radio" { ...form.bind.radio("field3", "value2") } />
-      
-      <select { ...form.bind.select("field4") }>
-        <option>option 1</option>
-        <option>option 2<option>
-        <option>option 3<option>
-      </select>
-          
-      <button { ...form.bind.submit() }>Submit</button>
-    </form>
-  )
-}
-```
-
+There is a very easy to use, hooks based, React integration for this library. That also comes with bindings for  basic HTML input elements. Please take a look at [@bytesoftio/use-form](https://github.com/bytesoftio/use-form)

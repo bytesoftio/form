@@ -1,5 +1,5 @@
 {
-  "name": "@bytesoftio/use-form",
+  "name": "@bytesoftio/form",
   "version": "1.0.3",
   "author": "Maxim Kott",
   "license": "MIT",
@@ -8,7 +8,7 @@
   "files": [
     "/dist"
   ],
-  "repository": "github:bytesoftio/use-form",
+  "repository": "github:bytesoftio/form",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
@@ -18,32 +18,21 @@
     "lint": "tsc --noEmit",
     "build": "rm -rf dist && tsc -p tsconfig.build.json",
     "docs": "doctoc readme.md && typedoc src/index.ts --out docs --hideGenerator --tsconfig tsconfig.build.json --mode library --theme minimal",
-    "release": "yarn run build && np"
+    "release": "yarn run build && np --no-release-draft"
   },
   "dependencies": {
     "@bytesoftio/helpers-promises": "^1.0.0",
-    "@bytesoftio/schema": "^1.0.1",
-    "@bytesoftio/use-store": "^1.2.0",
-    "@bytesoftio/use-value": "^1.2.0",
+    "@bytesoftio/schema": "^1.1.0",
+    "@bytesoftio/store": "^2.0.0",
+    "@bytesoftio/value": "^2.0.0",
     "lodash": "^4.17.15"
   },
-  "peerDependencies": {
-    "react": "^16.13.0",
-    "react-dom": "^16.13.0"
-  },
   "devDependencies": {
-    "@types/enzyme": "^3.10.5",
     "@types/jest": "^25.1.4",
     "@types/lodash": "^4.14.149",
     "@types/node": "^13.9.1",
-    "@types/react": "^16.9.23",
-    "@types/react-dom": "^16.9.5",
     "doctoc": "^1.4.0",
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.2",
     "jest": "^25.1.0",
-    "react": "^16.13.0",
-    "react-dom": "^16.13.0",
     "ts-jest": "^25.2.1",
     "typedoc": "^0.17.0-3",
     "typescript": "^3.8.3"

@@ -2,32 +2,30 @@ import {
   FormCallback,
   FormConfig,
   FormHandler,
-  FormSpread, FormSubmitOptions, FormValidateOptions,
+  FormSubmitOptions, FormValidateOptions,
   FormValidator,
-  HookForm, HookFormBinder,
-  HookFormErrors,
-  HookFormFields,
-  HookFormData,
+  ObservableForm,
+  ObservableErrors,
+  ObservableFormFields,
+  ObservableFormData,
 } from "./types"
-import { createValue, HookValue } from "@bytesoftio/use-value"
+import { createValue, ObservableValue } from "@bytesoftio/value"
 import { createFormState } from "./createFormState"
 import { createFormFields } from "./createFormFields"
 import { createFormErrors } from "./createFormErrors"
 import { keys, merge } from "lodash"
 import { createValidationResult, ValidationResult, ValidationSchema } from "@bytesoftio/schema"
-import { createStore, HookStore } from "@bytesoftio/use-store"
-import { createFormBinder } from "./createFormBinder"
+import { createStore, ObservableStore } from "@bytesoftio/store"
 
-export class Form<S extends object = any, R extends object = any> implements HookForm<S, R> {
+export class Form<S extends object = any, R extends object = any> implements ObservableForm<S, R> {
   config: FormConfig<S, R>
-  data: HookFormData<S>
-  dirtyFields: HookFormFields
-  changedFields: HookFormFields
-  submitting: HookValue<boolean>
-  submitted: HookValue<boolean>
-  errors: HookFormErrors
-  result: HookStore<R>
-  bind: HookFormBinder
+  data: ObservableFormData<S>
+  dirtyFields: ObservableFormFields
+  changedFields: ObservableFormFields
+  submitting: ObservableValue<boolean>
+  submitted: ObservableValue<boolean>
+  errors: ObservableErrors
+  result: ObservableStore<R>
 
   constructor(initialState: S) {
     this.config = {
@@ -46,7 +44,6 @@ export class Form<S extends object = any, R extends object = any> implements Hoo
     this.submitted = createValue<boolean>(false)
     this.errors = createFormErrors()
     this.result = createStore<R>({} as R)
-    this.bind = createFormBinder(this)
 
     this.setupValidateOnChange()
   }
@@ -61,28 +58,16 @@ export class Form<S extends object = any, R extends object = any> implements Hoo
     this.result.reset()
   }
 
-  listen(callback: FormCallback<S, R>): void {
+  listen(callback: FormCallback<S, R>, notifyImmediately?: boolean): void {
     const formCallback = () => callback(this)
 
-    this.data.listen(formCallback)
-    this.submitting.listen(formCallback)
-    this.submitted.listen(formCallback)
-    this.dirtyFields.listen(formCallback)
-    this.changedFields.listen(formCallback)
-    this.errors.listen(formCallback)
-    this.result.listen(formCallback)
-  }
-
-  use(): FormSpread<S> {
-    this.data.use()
-    this.submitting.use()
-    this.submitted.use()
-    this.dirtyFields.use()
-    this.changedFields.use()
-    this.errors.use()
-    this.result.use()
-
-    return this.unpack()
+    this.data.listen(formCallback, notifyImmediately)
+    this.submitting.listen(formCallback, notifyImmediately)
+    this.submitted.listen(formCallback, notifyImmediately)
+    this.dirtyFields.listen(formCallback, notifyImmediately)
+    this.changedFields.listen(formCallback, notifyImmediately)
+    this.errors.listen(formCallback, notifyImmediately)
+    this.result.listen(formCallback, undefined, notifyImmediately)
   }
 
   configure(config: Partial<FormConfig<S, R>>): this {
@@ -201,9 +186,5 @@ export class Form<S extends object = any, R extends object = any> implements Hoo
         }
       }
     })
-  }
-
-  protected unpack(): FormSpread<S> {
-    return [this.data.get(), this.errors.get(), this.submitting.get()]
   }
 }

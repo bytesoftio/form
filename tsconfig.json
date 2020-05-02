@@ -4,7 +4,6 @@
       "es2017",
       "dom"
     ],
-    "jsx": "react",
     "strict": true,
     "noImplicitAny": false,
     "target": "es5",
@@ -17,7 +16,6 @@
     "outDir": "dist"
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx"
+    "src/**/*.ts"
   ]
 }

@@ -1,7 +1,4 @@
-import React from "react"
 import { FormState } from "./FormState"
-import { mount } from "enzyme"
-import { act } from "react-dom/test-utils"
 import { createFormFields } from "./createFormFields"
 
 describe("FormState", () => {
@@ -74,28 +71,7 @@ describe("FormState", () => {
     expect(state.hasAt("bar")).toBe(false)
   })
 
-  it("hooks inside react", async () => {
-    const state = new FormState({ foo: "bar" }, createFormFields(), createFormFields())
-
-    const Test = () => {
-      const [value] = state.use()
-
-      return (
-        <h1>{value.foo}</h1>
-      )
-    }
-
-    const wrapper = mount(<Test/>)
-    const target = () => wrapper.find("h1")
-
-    expect(target().text()).toBe("bar")
-
-    act(() => state.setAt("foo", "baz"))
-
-    expect(target().text()).toBe("baz")
-  })
-
-  it("hooks outside react", () => {
+  it("listens to changes", () => {
     const state = new FormState({ foo: "bar", baz: { yolo: "swag" } }, createFormFields(), createFormFields())
     const callback = jest.fn()
 

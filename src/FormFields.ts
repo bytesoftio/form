@@ -1,9 +1,9 @@
 import { difference, isArray, uniq } from "lodash"
-import { HookFormFields } from "./types"
-import { createValue, HookValue, ValueCallback, ValueSpread } from "@bytesoftio/use-value"
+import { ObservableFormFields } from "./types"
+import { createValue, ObservableValue, ValueCallback } from "@bytesoftio/value"
 
-export class FormFields implements HookFormFields {
-  state: HookValue<string[]>
+export class FormFields implements ObservableFormFields {
+  state: ObservableValue<string[]>
 
   constructor(initialState?: string[]) {
     this.state = createValue<string[]>([])
@@ -49,11 +49,7 @@ export class FormFields implements HookFormFields {
     this.state.reset()
   }
 
-  listen(callback: ValueCallback<string[]>): void {
-    this.state.listen(callback)
-  }
-
-  use(): ValueSpread<string[]> {
-    return this.state.use()
+  listen(callback: ValueCallback<string[]>, notifyImmediately?: boolean): void {
+    this.state.listen(callback, notifyImmediately)
   }
 }

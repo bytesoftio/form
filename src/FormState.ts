@@ -1,16 +1,16 @@
-import { HookFormFields, HookFormData } from "./types"
-import { createStore, HookStore, StoreCallback, StoreSpread } from "@bytesoftio/use-store"
+import { ObservableFormFields, ObservableFormData } from "./types"
+import { createStore, ObservableStore, StoreCallback } from "@bytesoftio/store"
 import { get, has, set, isEqual } from "lodash"
 
-export class FormState<S extends object> implements HookFormData<S> {
-  state: HookStore<S>
-  dirtyFields: HookFormFields
-  changedFields: HookFormFields
+export class FormState<S extends object> implements ObservableFormData<S> {
+  state: ObservableStore<S>
+  dirtyFields: ObservableFormFields
+  changedFields: ObservableFormFields
 
   constructor(
     initialState: S | undefined,
-    dirtyFields: HookFormFields,
-    changedFields: HookFormFields
+    dirtyFields: ObservableFormFields,
+    changedFields: ObservableFormFields
   ) {
     this.state = createStore(initialState || {} as any)
     this.dirtyFields = dirtyFields
@@ -55,11 +55,7 @@ export class FormState<S extends object> implements HookFormData<S> {
     return has(this.state.get(), path)
   }
 
-  listen(callback: StoreCallback<S>): void {
-    this.state.listen(callback)
-  }
-
-  use(): StoreSpread<S, Partial<S>> {
-    return this.state.use()
+  listen(callback: StoreCallback<S>, notifyImmediately?: boolean): void {
+    this.state.listen(callback, undefined, notifyImmediately)
   }
 }
