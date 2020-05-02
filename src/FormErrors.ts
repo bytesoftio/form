@@ -39,7 +39,7 @@ export class FormErrors implements ObservableErrors {
   }
 
   setAt(path: string, newErrors: string[]): void {
-    const errors = this.get()
+    const errors = this.state.get()
     errors[path] = newErrors
 
     this.state.set(errors)

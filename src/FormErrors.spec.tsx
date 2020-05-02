@@ -112,4 +112,26 @@ describe("FormErrors", () => {
     expect(callback).toHaveBeenCalledTimes(2)
     expect(callback).toHaveBeenCalledWith({ foo: ["bar"], bar: ["baz"] })
   })
+
+  it("it modifies errors even if error object is not initialized yet", () => {
+    const errors1 = new FormErrors()
+    expect(errors1.get()).toBe(undefined)
+    errors1.set({field: ["error"]})
+    expect(errors1.get()).toEqual({field: ["error"]})
+
+    const errors2 = new FormErrors()
+    expect(errors2.get()).toBe(undefined)
+    errors2.setAt("field", ["error"])
+    expect(errors2.get()).toEqual({field: ["error"]})
+
+    const errors3 = new FormErrors()
+    expect(errors3.get()).toBe(undefined)
+    errors3.add({field: ["error"]})
+    expect(errors3.get()).toEqual({field: ["error"]})
+
+    const errors4 = new FormErrors()
+    expect(errors4.get()).toBe(undefined)
+    errors4.addAt("field", ["error"])
+    expect(errors4.get()).toEqual({field: ["error"]})
+  })
 })
