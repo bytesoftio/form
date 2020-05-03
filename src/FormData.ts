@@ -2,7 +2,7 @@ import { ObservableFormFields, ObservableFormData } from "./types"
 import { createStore, ObservableStore, StoreCallback } from "@bytesoftio/store"
 import { get, has, set, isEqual } from "lodash"
 
-export class FormState<S extends object> implements ObservableFormData<S> {
+export class FormData<S extends object> implements ObservableFormData<S> {
   state: ObservableStore<S>
   dirtyFields: ObservableFormFields
   changedFields: ObservableFormFields
@@ -56,6 +56,6 @@ export class FormState<S extends object> implements ObservableFormData<S> {
   }
 
   listen(callback: StoreCallback<S>, notifyImmediately?: boolean): void {
-    this.state.listen(callback, undefined, notifyImmediately)
+    this.state.listen(callback, notifyImmediately)
   }
 }

@@ -23,8 +23,8 @@
   "dependencies": {
     "@bytesoftio/helpers-promises": "^1.0.0",
     "@bytesoftio/schema": "^1.1.0",
-    "@bytesoftio/store": "^2.0.3",
-    "@bytesoftio/value": "^2.0.0",
+    "@bytesoftio/store": "^2.0.4",
+    "@bytesoftio/value": "^2.0.2",
     "lodash": "^4.17.15"
   },
   "devDependencies": {

@@ -10,7 +10,7 @@ import {
   ObservableFormData,
 } from "./types"
 import { createValue, ObservableValue } from "@bytesoftio/value"
-import { createFormState } from "./createFormState"
+import { createFormData } from "./createFormData"
 import { createFormFields } from "./createFormFields"
 import { createFormErrors } from "./createFormErrors"
 import { keys, merge } from "lodash"
@@ -39,7 +39,7 @@ export class Form<S extends object = any, R extends object = any> implements Obs
 
     this.dirtyFields = createFormFields()
     this.changedFields = createFormFields()
-    this.data = createFormState(initialState, this.dirtyFields, this.changedFields)
+    this.data = createFormData(initialState, this.dirtyFields, this.changedFields)
     this.submitting = createValue<boolean>(false)
     this.submitted = createValue<boolean>(false)
     this.errors = createFormErrors()
@@ -67,7 +67,7 @@ export class Form<S extends object = any, R extends object = any> implements Obs
     this.dirtyFields.listen(formCallback, notifyImmediately)
     this.changedFields.listen(formCallback, notifyImmediately)
     this.errors.listen(formCallback, notifyImmediately)
-    this.result.listen(formCallback, undefined, notifyImmediately)
+    this.result.listen(formCallback, notifyImmediately)
   }
 
   configure(config: Partial<FormConfig<S, R>>): this {
@@ -158,11 +158,9 @@ export class Form<S extends object = any, R extends object = any> implements Obs
 
     const allErrors = [...validatorErrors, ...schemaErrors]
 
-    const errors = {}
-
-    allErrors.forEach(errorSet => {
-      merge(errors, errorSet)
-    })
+    const errors = allErrors.reduce((errors, errorSet) => {
+      return merge({}, errors, errorSet)
+    }, {})!
 
     if (changedFieldsOnly) {
       keys(errors).forEach(key => {
@@ -185,6 +183,6 @@ export class Form<S extends object = any, R extends object = any> implements Obs
         } catch (error) {
         }
       }
-    })
+    }, false)
   }
 }

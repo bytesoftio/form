@@ -1,9 +1,9 @@
-import { FormState } from "./FormState"
+import { FormData } from "./FormData"
 import { createFormFields } from "./createFormFields"
 
-describe("FormState", () => {
+describe("FormData", () => {
   it("sets and returns state", () => {
-    const state = new FormState<any>({}, createFormFields(), createFormFields())
+    const state = new FormData<any>({}, createFormFields(), createFormFields())
 
     expect(state.get()).toEqual({})
 
@@ -17,20 +17,20 @@ describe("FormState", () => {
   })
 
   it("returns initial state", () => {
-    const state = new FormState({ foo: "bar" }, createFormFields(), createFormFields())
+    const state = new FormData({ foo: "bar" }, createFormFields(), createFormFields())
 
     expect(state.get()).toEqual({ foo: "bar" })
   })
 
   it("adds new state", () => {
-    const state = new FormState<any>({ foo: "bar" }, createFormFields(), createFormFields())
+    const state = new FormData<any>({ foo: "bar" }, createFormFields(), createFormFields())
     state.add({ bar: "baz" })
 
     expect(state.get()).toEqual({ foo: "bar", bar: "baz" })
   })
 
   it("resets to initial state", () => {
-    const state = new FormState<any>({ foo: "bar" }, createFormFields(), createFormFields())
+    const state = new FormData<any>({ foo: "bar" }, createFormFields(), createFormFields())
 
     state.add({ bar: "baz" })
     state.reset()
@@ -49,14 +49,14 @@ describe("FormState", () => {
   })
 
   it("returns state at", () => {
-    const state = new FormState<any>({ foo: "bar" }, createFormFields(), createFormFields())
+    const state = new FormData<any>({ foo: "bar" }, createFormFields(), createFormFields())
 
     expect(state.getAt("foo")).toBe("bar")
     expect(state.getAt("bar")).toBe(undefined)
   })
 
   it("sets state at", () => {
-    const state = new FormState<any>({ foo: "bar" }, createFormFields(), createFormFields())
+    const state = new FormData<any>({ foo: "bar" }, createFormFields(), createFormFields())
 
     state.setAt("foo", "baz")
     state.setAt("yolo", "swag")
@@ -65,14 +65,14 @@ describe("FormState", () => {
   })
 
   it("tells if state is set at", () => {
-    const state = new FormState<any>({ foo: "bar" }, createFormFields(), createFormFields())
+    const state = new FormData<any>({ foo: "bar" }, createFormFields(), createFormFields())
 
     expect(state.hasAt("foo")).toBe(true)
     expect(state.hasAt("bar")).toBe(false)
   })
 
   it("listens to changes", () => {
-    const state = new FormState({ foo: "bar", baz: { yolo: "swag" } }, createFormFields(), createFormFields())
+    const state = new FormData({ foo: "bar", baz: { yolo: "swag" } }, createFormFields(), createFormFields())
     const callback = jest.fn()
 
     state.listen(callback)

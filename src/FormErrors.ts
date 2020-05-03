@@ -95,7 +95,7 @@ export class FormErrors implements ObservableErrors {
   listen(callback: FormErrorsCallback<ValidationResult>, notifyImmediately?: boolean): void {
     const wrappedCallback = (errors: ValidationResult) => callback(this.isEmptyErrorsObject(errors) ? undefined : errors)
 
-    this.state.listen(wrappedCallback, undefined, notifyImmediately)
+    this.state.listen(wrappedCallback, notifyImmediately)
   }
 
   protected isEmptyErrorsObject(errors: object|undefined): boolean {
