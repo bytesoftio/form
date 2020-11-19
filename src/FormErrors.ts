@@ -92,7 +92,7 @@ export class FormErrors implements ObservableErrors {
     this.state.reset()
   }
 
-  listen(callback: FormErrorsCallback<ValidationResult>, notifyImmediately?: boolean): void {
+  listen(callback: FormErrorsCallback, notifyImmediately?: boolean): void {
     const wrappedCallback = (errors: ValidationResult) => callback(this.isEmptyErrorsObject(errors) ? undefined : errors)
 
     this.state.listen(wrappedCallback, notifyImmediately)

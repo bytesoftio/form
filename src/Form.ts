@@ -17,17 +17,17 @@ import { keys, merge } from "lodash"
 import { createValidationResult, ValidationResult, ValidationSchema } from "@bytesoftio/schema"
 import { createStore, ObservableStore } from "@bytesoftio/store"
 
-export class Form<S extends object = any, R extends object = any> implements ObservableForm<S, R> {
-  config: FormConfig<S, R>
-  data: ObservableFormData<S>
+export class Form<TState extends object = any, TResult extends object = any> implements ObservableForm<TState, TResult> {
+  config: FormConfig<TState, TResult>
+  data: ObservableFormData<TState>
   dirtyFields: ObservableFormFields
   changedFields: ObservableFormFields
   submitting: ObservableValue<boolean>
   submitted: ObservableValue<boolean>
   errors: ObservableErrors
-  result: ObservableStore<R>
+  result: ObservableStore<TResult>
 
-  constructor(initialState: S) {
+  constructor(initialState: TState) {
     this.config = {
       handlers: [],
       validators: [],
@@ -43,12 +43,12 @@ export class Form<S extends object = any, R extends object = any> implements Obs
     this.submitting = createValue<boolean>(false)
     this.submitted = createValue<boolean>(false)
     this.errors = createFormErrors()
-    this.result = createStore<R>({} as R)
+    this.result = createStore<TResult>({} as TResult)
 
     this.setupValidateOnChange()
   }
 
-  reset(initialState?: S): void {
+  reset(initialState?: TState): void {
     this.data.reset(initialState)
     this.submitting.reset()
     this.submitted.reset()
@@ -58,7 +58,7 @@ export class Form<S extends object = any, R extends object = any> implements Obs
     this.result.reset()
   }
 
-  listen(callback: FormCallback<S, R>, notifyImmediately?: boolean): void {
+  listen(callback: FormCallback<TState, TResult>, notifyImmediately?: boolean): void {
     const formCallback = () => callback(this)
 
     this.data.listen(formCallback, notifyImmediately)
@@ -70,19 +70,19 @@ export class Form<S extends object = any, R extends object = any> implements Obs
     this.result.listen(formCallback, notifyImmediately)
   }
 
-  configure(config: Partial<FormConfig<S, R>>): this {
+  configure(config: Partial<FormConfig<TState, TResult>>): this {
     this.config = { ...this.config, ...config }
 
     return this
   }
 
-  handler(handler: FormHandler<S, R>): this {
+  handler(handler: FormHandler<TState, TResult>): this {
     this.config.handlers.push(handler)
 
     return this
   }
 
-  validator(handler: FormValidator<S, R>): this {
+  validator(handler: FormValidator<TState, TResult>): this {
     this.config.validators.push(handler)
 
     return this
