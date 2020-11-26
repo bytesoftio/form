@@ -10,16 +10,16 @@ import {
   ObservableFormValues,
 } from "./types"
 import { createValue, ObservableValue } from "@bytesoftio/value"
-import { createFormData } from "./createFormData"
+import { createFormValues } from "./createFormValues"
 import { createFormFields } from "./createFormFields"
 import { createFormErrors } from "./createFormErrors"
 import { keys, merge } from "lodash"
 import { createValidationResult, ValidationResult, ValidationSchema } from "@bytesoftio/schema"
 import { createStore, ObservableStore } from "@bytesoftio/store"
 
-export class Form<TState extends object = any, TResult extends object = any> implements ObservableForm<TState, TResult> {
-  config: FormConfig<TState, TResult>
-  values: ObservableFormValues<TState>
+export class Form<TValues extends object = any, TResult extends object = any> implements ObservableForm<TValues, TResult> {
+  config: FormConfig<TValues, TResult>
+  values: ObservableFormValues<TValues>
   dirtyFields: ObservableFormFields
   changedFields: ObservableFormFields
   submitting: ObservableValue<boolean>
@@ -27,7 +27,7 @@ export class Form<TState extends object = any, TResult extends object = any> imp
   errors: ObservableErrors
   result: ObservableStore<TResult>
 
-  constructor(initialState: TState) {
+  constructor(initialValues: TValues) {
     this.config = {
       handlers: [],
       validators: [],
@@ -39,7 +39,7 @@ export class Form<TState extends object = any, TResult extends object = any> imp
 
     this.dirtyFields = createFormFields()
     this.changedFields = createFormFields()
-    this.values = createFormData(initialState, this.dirtyFields, this.changedFields)
+    this.values = createFormValues(initialValues, this.dirtyFields, this.changedFields)
     this.submitting = createValue<boolean>(false)
     this.submitted = createValue<boolean>(false)
     this.errors = createFormErrors()
@@ -48,8 +48,8 @@ export class Form<TState extends object = any, TResult extends object = any> imp
     this.setupValidateOnChange()
   }
 
-  reset(initialState?: TState): void {
-    this.values.reset(initialState)
+  reset(initialValues?: TValues): void {
+    this.values.reset(initialValues)
     this.submitting.reset()
     this.submitted.reset()
     this.dirtyFields.clear()
@@ -58,7 +58,7 @@ export class Form<TState extends object = any, TResult extends object = any> imp
     this.result.reset()
   }
 
-  listen(callback: FormCallback<TState, TResult>, notifyImmediately?: boolean): void {
+  listen(callback: FormCallback<TValues, TResult>, notifyImmediately?: boolean): void {
     const formCallback = () => callback(this)
 
     this.values.listen(formCallback, notifyImmediately)
@@ -70,19 +70,19 @@ export class Form<TState extends object = any, TResult extends object = any> imp
     this.result.listen(formCallback, notifyImmediately)
   }
 
-  configure(config: Partial<FormConfig<TState, TResult>>): this {
+  configure(config: Partial<FormConfig<TValues, TResult>>): this {
     this.config = { ...this.config, ...config }
 
     return this
   }
 
-  handler(handler: FormHandler<TState, TResult>): this {
+  handler(handler: FormHandler<TValues, TResult>): this {
     this.config.handlers.push(handler)
 
     return this
   }
 
-  validator(handler: FormValidator<TState, TResult>): this {
+  validator(handler: FormValidator<TValues, TResult>): this {
     this.config.validators.push(handler)
 
     return this

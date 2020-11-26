@@ -1,4 +1,4 @@
 import { FormFields } from "./FormFields"
 import { CreateFormFields } from "./types"
 
-export const createFormFields: CreateFormFields = (initialState?: string[]) => new FormFields(initialState)
+export const createFormFields: CreateFormFields = (initialValue?: string[]) => new FormFields(initialValue)

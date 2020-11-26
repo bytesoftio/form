@@ -3,18 +3,18 @@ import { ObservableFormFields } from "./types"
 import { createValue, ObservableValue, ValueCallback } from "@bytesoftio/value"
 
 export class FormFields implements ObservableFormFields {
-  state: ObservableValue<string[]>
+  value: ObservableValue<string[]>
 
-  constructor(initialState?: string[]) {
-    this.state = createValue<string[]>([])
+  constructor(initialValue?: string[]) {
+    this.value = createValue<string[]>([])
 
-    if (initialState) {
-      this.set(initialState)
+    if (initialValue) {
+      this.set(initialValue)
     }
   }
 
   get(): string[] {
-    return this.state.get()
+    return this.value.get()
   }
 
   has(fields: string | string[]): boolean {
@@ -22,11 +22,11 @@ export class FormFields implements ObservableFormFields {
       fields = [fields]
     }
 
-    return difference(fields, this.state.get()).length === 0
+    return difference(fields, this.value.get()).length === 0
   }
 
   set(fields: string[]) {
-    this.state.set(uniq(fields))
+    this.value.set(uniq(fields))
   }
 
   add(fields: string | string[]) {
@@ -34,7 +34,7 @@ export class FormFields implements ObservableFormFields {
       fields = [fields]
     }
 
-    this.set([...this.state.get(), ...fields])
+    this.set([...this.value.get(), ...fields])
   }
 
   remove(fields: string | string[]) {
@@ -42,14 +42,14 @@ export class FormFields implements ObservableFormFields {
       fields = [fields]
     }
 
-    this.state.set(difference(this.state.get(), fields))
+    this.value.set(difference(this.value.get(), fields))
   }
 
   clear() {
-    this.state.reset()
+    this.value.reset()
   }
 
   listen(callback: ValueCallback<string[]>, notifyImmediately?: boolean): void {
-    this.state.listen(callback, notifyImmediately)
+    this.value.listen(callback, notifyImmediately)
   }
 }

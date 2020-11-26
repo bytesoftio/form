@@ -245,7 +245,7 @@ const form = createForm({
   })
 ```
 
-Additionaly it is possible to provide a validation schema powered by the very easy to use [@bytesoftio/schema](https://github.com/bytesoftio/schema) package.
+Additionally, it is possible to provide a validation schema powered by the very easy to use [@bytesoftio/schema](https://github.com/bytesoftio/schema) package.
 
 ```ts
 import { createForm } from "@bytesoftio/form"

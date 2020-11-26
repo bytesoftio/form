@@ -4,18 +4,18 @@ import { createStore, ObservableStore } from "@bytesoftio/store"
 import { get, isArray, keys } from "lodash"
 
 export class FormErrors implements ObservableErrors {
-  state: ObservableStore<ValidationResult>
+  value: ObservableStore<ValidationResult>
 
-  constructor(initialState?: ValidationResult) {
-    this.state = createStore({})
+  constructor(initialValue?: ValidationResult) {
+    this.value = createStore({})
 
-    if (initialState) {
-      this.set(initialState)
+    if (initialValue) {
+      this.set(initialValue)
     }
   }
 
   get(): ValidationResult | undefined | any {
-    const errors = this.state.get()
+    const errors = this.value.get()
 
     if (this.isEmptyErrorsObject(errors)) {
       return undefined
@@ -25,7 +25,7 @@ export class FormErrors implements ObservableErrors {
   }
 
   getAt(path: string): string[] | undefined {
-    const errors = get(this.state.get(), path)
+    const errors = get(this.value.get(), path)
 
     if (this.isEmptyErrorsArray(errors)) {
       return undefined
@@ -35,18 +35,18 @@ export class FormErrors implements ObservableErrors {
   }
 
   set(newErrors: ValidationResult): void {
-    this.state.set(newErrors)
+    this.value.set(newErrors)
   }
 
   setAt(path: string, newErrors: string[]): void {
-    const errors = this.state.get()
+    const errors = this.value.get()
     errors[path] = newErrors
 
-    this.state.set(errors)
+    this.value.set(errors)
   }
 
   add(newErrors: Partial<ValidationResult>): void {
-    this.state.add(newErrors)
+    this.value.add(newErrors)
   }
 
   addAt(path: string, newErrors: string | string[]): void {
@@ -79,7 +79,7 @@ export class FormErrors implements ObservableErrors {
       path = [path]
     }
 
-    const errors = this.state.get()
+    const errors = this.value.get()
 
     if (errors) {
       path.forEach(p => delete errors[p])
@@ -89,13 +89,13 @@ export class FormErrors implements ObservableErrors {
   }
 
   clear(): void {
-    this.state.reset()
+    this.value.reset()
   }
 
   listen(callback: FormErrorsCallback, notifyImmediately?: boolean): void {
     const wrappedCallback = (errors: ValidationResult) => callback(this.isEmptyErrorsObject(errors) ? undefined : errors)
 
-    this.state.listen(wrappedCallback, notifyImmediately)
+    this.value.listen(wrappedCallback, notifyImmediately)
   }
 
   protected isEmptyErrorsObject(errors: object|undefined): boolean {
