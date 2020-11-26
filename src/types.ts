@@ -1,8 +1,13 @@
 import { ObservableValue, ValueCallback } from "@bytesoftio/value"
-import { ObjectSchema, ValidationResult, ValidationSchema } from "@bytesoftio/schema"
+import {
+  ObjectSchema,
+  ValidationResult,
+  ValidationSchema,
+} from "@bytesoftio/schema"
 import { ObservableStore, StoreCallback } from "@bytesoftio/store"
 
 export type CreateForm = <TValue extends object = any, TResult extends object = any>(initialValue: TValue) => ObservableForm<TValue, TResult>
+export type CreateFormFromSchema = <TValue extends object = any, TResult extends object = any>(schema: ObjectSchema<TValue>) => ObservableForm<TValue, TResult>
 export type CreateFormErrors = (initialValue?: ValidationResult) => ObservableErrors
 export type CreateFormFields = (initialValue?: string[]) => ObservableFormFields
 export type CreateFormValues = <TValue extends object>(initialValue: TValue | undefined, dirtyFields: ObservableFormFields, changedFields: ObservableFormFields) => ObservableFormValues<TValue>

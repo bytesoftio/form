@@ -15,6 +15,7 @@
 - [Form config](#form-config)
 - [Form values](#form-values)
 - [Validation logic](#validation-logic)
+- [Create form from schema definition](#create-form-from-schema-definition)
 - [Validation and errors](#validation-and-errors)
 - [Submit form and provide feedback](#submit-form-and-provide-feedback)
 - [Reset form state](#reset-form-state)
@@ -259,6 +260,25 @@ const form = createForm({
     title: string().between(3, 50),
     user: object({ firstName: string().between(3, 50) })
   }))
+```
+
+## Create form from schema definition
+
+In order to prevent unnecessary boilerplate code, it is possible to create a form based of a schema definition. It is important to either use the `value` helper from the `@bytesoftio/schema` package, or provide a defualt value using the `toDefault` method.
+
+```ts
+import { createFormFromSchema } from "@bytesoftio/form"
+import { object, value } from "@bytesoftio/schema"
+
+const form1 = createFormFromSchema(object({
+  foo: value("default value").string().min(3),
+  bar: value(12).number().max(100)
+}))
+// same as
+const form2 = createFormFromSchema(object({
+  foo: string().toDefault("default value").min(3),
+  bar: number().toDefault(12).max(100)
+}))
 ```
 
 ## Validation and errors

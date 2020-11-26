@@ -149,7 +149,7 @@ export class Form<TValues extends object = any, TResult extends object = any> im
 
     const schemaErrors = await Promise.all(this.config.schemas.map(async (schema, index) => {
       try {
-        return createValidationResult(await schema.validate(this.values.get()))
+        return createValidationResult(await schema.validateAsync(this.values.get()))
       } catch (error) {
         console.error(`There was an error in form schema #${index}:`, error)
         throw error
