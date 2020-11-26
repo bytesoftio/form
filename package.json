@@ -1,6 +1,6 @@
 {
   "name": "@bytesoftio/form",
-  "version": "2.0.4",
+  "version": "3.0.0",
   "author": "Maxim Kott",
   "license": "MIT",
   "main": "dist/index.js",
