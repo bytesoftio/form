@@ -14,7 +14,11 @@ import { createFormValues } from "./createFormValues"
 import { createFormFields } from "./createFormFields"
 import { createFormErrors } from "./createFormErrors"
 import { keys, merge } from "lodash"
-import { createValidationResult, ValidationResult, ValidationSchema } from "@bytesoftio/schema"
+import {
+  createValidationResult,
+  ObjectSchema,
+  ValidationResult,
+} from "@bytesoftio/schema"
 import { createStore, ObservableStore } from "@bytesoftio/store"
 
 export class Form<TValues extends object = any, TResult extends object = any> implements ObservableForm<TValues, TResult> {
@@ -88,7 +92,7 @@ export class Form<TValues extends object = any, TResult extends object = any> im
     return this
   }
 
-  schema(handler: ValidationSchema): this {
+  schema(handler: ObjectSchema<TValues>): this {
     this.config.schemas.push(handler)
 
     return this

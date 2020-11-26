@@ -1,10 +1,15 @@
-import { ObservableValue, ValueCallback } from "@bytesoftio/value"
 import {
-  ObjectSchema,
+  ObservableValue,
+  ValueCallback,
+} from "@bytesoftio/value"
+import {
   ValidationResult,
-  ValidationSchema,
+  ObjectSchema,
 } from "@bytesoftio/schema"
-import { ObservableStore, StoreCallback } from "@bytesoftio/store"
+import {
+  ObservableStore,
+  StoreCallback,
+} from "@bytesoftio/store"
 
 export type CreateForm = <TValue extends object = any, TResult extends object = any>(initialValue: TValue) => ObservableForm<TValue, TResult>
 export type CreateFormFromSchema = <TValue extends object = any, TResult extends object = any>(schema: ObjectSchema<TValue>) => ObservableForm<TValue, TResult>
@@ -16,12 +21,12 @@ export type FormCallback<TValue extends object, TResult extends object> = (form:
 export type FormHandler<TValue extends object, TResult extends object> = (form: ObservableForm<TValue, TResult>) => Promise<any> | any
 export type FormValidateOptions = { changedFieldsOnly?: boolean }
 export type FormSubmitOptions = { validate?: boolean }
-export type FormErrorsCallback = (newErrors: ValidationResult|undefined) => void
+export type FormErrorsCallback = (newErrors: ValidationResult | undefined) => void
 
-export type FormConfig<S extends object, R extends object> = {
-  validators: FormValidator<S, R>[]
-  schemas: ValidationSchema[]
-  handlers: FormHandler<S, R>[]
+export type FormConfig<TValue extends object, TResult extends object> = {
+  validators: FormValidator<TValue, TResult>[]
+  schemas: ObjectSchema<TValue>[]
+  handlers: FormHandler<TValue, TResult>[]
   validateOnSubmit: boolean
   validateChangedFieldsOnly: boolean
   validateOnChange: boolean
@@ -89,7 +94,7 @@ export interface ObservableForm<TValue extends object = any, TResult extends obj
 
   configure(config: Partial<FormConfig<TValue, TResult>>): this
   validator(handler: FormValidator<TValue, TResult>): this
-  schema(handler: ObjectSchema<Partial<TValue>>): this
+  schema(handler: ObjectSchema<TValue>): this
   handler(handler: FormHandler<TValue, TResult>): this
 
   listen(callback: FormCallback<TValue, TResult>, notifyImmediately?: boolean): void

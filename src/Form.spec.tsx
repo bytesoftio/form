@@ -138,7 +138,7 @@ describe("Form", () => {
   it("validates with schema", async () => {
     const form = new Form({ foo: "bar" })
       .schema(object({ foo: string().min(4) }))
-      .schema(object({ bar: string().min(8) }))
+      .schema(object({ bar: string().min(8) }) as any)
 
     const errors = (await form.validate())!
 
@@ -201,7 +201,7 @@ describe("Form", () => {
   it("validates with mixed validators", async () => {
     const form = new Form({ foo: "bar" })
       .validator(() => ({ foo: ["error"] }))
-      .schema(object({ bar: string().min(8) }))
+      .schema(object({ bar: string().min(8) }) as any)
 
     const errors = (await form.validate())!
 

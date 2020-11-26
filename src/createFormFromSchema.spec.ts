@@ -1,12 +1,13 @@
 import { createFormFromSchema } from "./createFormFromSchema"
-import { object } from "@bytesoftio/schema"
-import { value } from "../../schema/src"
+import {
+  object,
+  value,
+} from "@bytesoftio/schema"
 
 describe("createFromFromSchema", () => {
   it("creates from from schema with default values", async () => {
-    const form = createFormFromSchema(object({
-      foo: value('bar').string().oneOf(['foo', 'yolo'])
-    }))
+    const schema = object({ foo: value('bar').string().oneOf(["foo"]) })
+    const form = createFormFromSchema<{ foo: string }>(schema)
 
     expect(form.values.getAt("foo")).toBe('bar')
 
