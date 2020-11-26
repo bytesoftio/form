@@ -5,7 +5,7 @@ import { ObservableStore, StoreCallback } from "@bytesoftio/store"
 export type CreateForm = <TState extends object = any, TResult extends object = any>(initialState: TState) => ObservableForm<TState, TResult>
 export type CreateFormErrors = (initialState?: ValidationResult) => ObservableErrors
 export type CreateFormFields = (initialState?: string[]) => ObservableFormFields
-export type CreateFormState = <TState extends object>(initialState: TState | undefined, dirtyFields: ObservableFormFields, changedFields: ObservableFormFields) => ObservableFormData<TState>
+export type CreateFormState = <TState extends object>(initialState: TState | undefined, dirtyFields: ObservableFormFields, changedFields: ObservableFormFields) => ObservableFormValues<TState>
 export type FormValidator<TState extends object, TResult extends object> = (form: ObservableForm<TState, TResult>) => Promise<ValidationResult | undefined> | ValidationResult | undefined
 export type FormCallback<TState extends object, TResult extends object> = (form: ObservableForm<TState, TResult>) => void
 export type FormHandler<TState extends object, TResult extends object> = (form: ObservableForm<TState, TResult>) => Promise<any> | any
@@ -53,7 +53,7 @@ export interface ObservableErrors {
   listen(callback: FormErrorsCallback, notifyImmediately?: boolean): void
 }
 
-export interface ObservableFormData<TState extends object> {
+export interface ObservableFormValues<TState extends object> {
   state: ObservableStore<TState>
 
   get(): TState
@@ -70,7 +70,7 @@ export interface ObservableFormData<TState extends object> {
 
 export interface ObservableForm<TState extends object = any, TResult extends object = any> {
   config: FormConfig<TState, TResult>
-  data: ObservableFormData<TState>
+  values: ObservableFormValues<TState>
   dirtyFields: ObservableFormFields
   changedFields: ObservableFormFields
   submitting: ObservableValue<boolean>

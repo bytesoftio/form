@@ -7,7 +7,7 @@ import {
   ObservableForm,
   ObservableErrors,
   ObservableFormFields,
-  ObservableFormData,
+  ObservableFormValues,
 } from "./types"
 import { createValue, ObservableValue } from "@bytesoftio/value"
 import { createFormData } from "./createFormData"
@@ -19,7 +19,7 @@ import { createStore, ObservableStore } from "@bytesoftio/store"
 
 export class Form<TState extends object = any, TResult extends object = any> implements ObservableForm<TState, TResult> {
   config: FormConfig<TState, TResult>
-  data: ObservableFormData<TState>
+  values: ObservableFormValues<TState>
   dirtyFields: ObservableFormFields
   changedFields: ObservableFormFields
   submitting: ObservableValue<boolean>
@@ -39,7 +39,7 @@ export class Form<TState extends object = any, TResult extends object = any> imp
 
     this.dirtyFields = createFormFields()
     this.changedFields = createFormFields()
-    this.data = createFormData(initialState, this.dirtyFields, this.changedFields)
+    this.values = createFormData(initialState, this.dirtyFields, this.changedFields)
     this.submitting = createValue<boolean>(false)
     this.submitted = createValue<boolean>(false)
     this.errors = createFormErrors()
@@ -49,7 +49,7 @@ export class Form<TState extends object = any, TResult extends object = any> imp
   }
 
   reset(initialState?: TState): void {
-    this.data.reset(initialState)
+    this.values.reset(initialState)
     this.submitting.reset()
     this.submitted.reset()
     this.dirtyFields.clear()
@@ -61,7 +61,7 @@ export class Form<TState extends object = any, TResult extends object = any> imp
   listen(callback: FormCallback<TState, TResult>, notifyImmediately?: boolean): void {
     const formCallback = () => callback(this)
 
-    this.data.listen(formCallback, notifyImmediately)
+    this.values.listen(formCallback, notifyImmediately)
     this.submitting.listen(formCallback, notifyImmediately)
     this.submitted.listen(formCallback, notifyImmediately)
     this.dirtyFields.listen(formCallback, notifyImmediately)
@@ -149,7 +149,7 @@ export class Form<TState extends object = any, TResult extends object = any> imp
 
     const schemaErrors = await Promise.all(this.config.schemas.map(async (schema, index) => {
       try {
-        return createValidationResult(await schema.validate(this.data.get()))
+        return createValidationResult(await schema.validate(this.values.get()))
       } catch (error) {
         console.error(`There was an error in form schema #${index}:`, error)
         throw error
@@ -176,7 +176,7 @@ export class Form<TState extends object = any, TResult extends object = any> imp
   }
 
   protected setupValidateOnChange() {
-    this.data.listen(() => {
+    this.values.listen(() => {
       if (this.config.validateOnChange) {
         try {
           this.validate({ changedFieldsOnly: true })

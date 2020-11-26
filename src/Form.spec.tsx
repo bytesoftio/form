@@ -7,52 +7,52 @@ describe("Form", () => {
   it("creates with initial state", () => {
     const form = new Form({ foo: "bar" })
 
-    expect(form.data.get()).toEqual({ foo: "bar" })
+    expect(form.values.get()).toEqual({ foo: "bar" })
   })
 
   it("returns and sets state", () => {
     const form = new Form({})
 
-    expect(form.data.get()).toEqual({})
+    expect(form.values.get()).toEqual({})
 
-    form.data.set({ foo: "bar" })
+    form.values.set({ foo: "bar" })
 
-    expect(form.data.get()).toEqual({ foo: "bar" })
+    expect(form.values.get()).toEqual({ foo: "bar" })
   })
 
   it("adds state", () => {
     const form = new Form<any>({ foo: "bar" })
 
-    form.data.add({ yolo: "swag" })
+    form.values.add({ yolo: "swag" })
 
-    expect(form.data.get()).toEqual({ foo: "bar", yolo: "swag" })
+    expect(form.values.get()).toEqual({ foo: "bar", yolo: "swag" })
   })
 
   it("returns state at given path", () => {
     const form = new Form<any>({ foo: "bar" })
 
-    expect(form.data.getAt("foo")).toBe("bar")
+    expect(form.values.getAt("foo")).toBe("bar")
   })
 
   it("sets state at given path", () => {
     const form = new Form<any>({ foo: "bar" })
 
-    form.data.setAt("yolo", "swag")
+    form.values.setAt("yolo", "swag")
 
-    expect(form.data.get()).toEqual({ foo: "bar", yolo: "swag" })
+    expect(form.values.get()).toEqual({ foo: "bar", yolo: "swag" })
   })
 
   it("tells if a value is set at given path", () => {
     const form = new Form<any>({ foo: "bar" })
 
-    expect(form.data.hasAt("foo")).toBe(true)
-    expect(form.data.hasAt("bar")).toBe(false)
+    expect(form.values.hasAt("foo")).toBe(true)
+    expect(form.values.hasAt("bar")).toBe(false)
   })
 
   it("resets everything to initial state", () => {
     const form = new Form<any>({ foo: "bar" })
 
-    form.data.set({ yolo: "swag" })
+    form.values.set({ yolo: "swag" })
     form.submitting.set(true)
     form.submitted.set(true)
     form.dirtyFields.set(["foo"])
@@ -62,7 +62,7 @@ describe("Form", () => {
 
     form.reset()
 
-    expect(form.data.get()).toEqual({ foo: "bar" })
+    expect(form.values.get()).toEqual({ foo: "bar" })
     expect(form.submitting.get()).toEqual(false)
     expect(form.submitted.get()).toEqual(false)
     expect(form.dirtyFields.get()).toEqual([])
@@ -348,7 +348,7 @@ describe("Form", () => {
 
     expect(form.errors.get()).toBe(undefined)
 
-    form.data.setAt("foo", "b")
+    form.values.setAt("foo", "b")
 
     await createTimeout(0)
 
@@ -359,12 +359,12 @@ describe("Form", () => {
   it("tracks a field as dirty and changed", () => {
     const form = new Form({ foo: "bar" })
 
-    form.data.setAt("foo", "bar")
+    form.values.setAt("foo", "bar")
 
     expect(form.dirtyFields.get()).toEqual(["foo"])
     expect(form.changedFields.get()).toEqual([])
 
-    form.data.setAt("foo", "baz")
+    form.values.setAt("foo", "baz")
 
     expect(form.dirtyFields.get()).toEqual(["foo"])
     expect(form.changedFields.get()).toEqual(["foo"])
@@ -379,7 +379,7 @@ describe("Form", () => {
     expect(listener).toHaveBeenCalledTimes(7)
     expect(listener).toHaveBeenCalledWith(form)
 
-    form.data.setAt("foo.bar", "yolo")
+    form.values.setAt("foo.bar", "yolo")
 
     expect(listener).toHaveBeenCalledTimes(10)
     expect(listener).toHaveBeenCalledWith(form)

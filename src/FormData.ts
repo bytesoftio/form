@@ -1,8 +1,8 @@
-import { ObservableFormFields, ObservableFormData } from "./types"
+import { ObservableFormFields, ObservableFormValues } from "./types"
 import { createStore, ObservableStore, StoreCallback } from "@bytesoftio/store"
 import { get, has, set, isEqual } from "lodash"
 
-export class FormData<TState extends object> implements ObservableFormData<TState> {
+export class FormData<TState extends object> implements ObservableFormValues<TState> {
   state: ObservableStore<TState>
   dirtyFields: ObservableFormFields
   changedFields: ObservableFormFields

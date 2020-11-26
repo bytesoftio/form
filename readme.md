@@ -13,7 +13,7 @@
 - [Description](#description)
 - [Quick start](#quick-start)
 - [Form config](#form-config)
-- [Form data](#form-data)
+- [Form values](#form-values)
 - [Validation logic](#validation-logic)
 - [Validation and errors](#validation-and-errors)
 - [Submit form and provide feedback](#submit-form-and-provide-feedback)
@@ -120,7 +120,7 @@ export const createUserForm = () => {
     .handler(async (form) => {
       try {
         // pretend to make an api call here 
-        const user = await createUser(form.data.get())
+        const user = await createUser(form.values.get())
 
         form.result.set({ success: "User created", user })
       } catch (error) {
@@ -185,9 +185,9 @@ const form = createForm({})
   })
 ```
 
-## Form data
+## Form values
 
-All the form data is stored inside the `form.data` object. It comes with a few convenient helper methods.
+All the form values are stored inside the `ObservableFormValues` object. It comes with a few convenient helper methods.
 
 ```ts
 import { createForm } from "@bytesoftio/form"
@@ -195,29 +195,29 @@ import { createForm } from "@bytesoftio/form"
 const initialState = { field1: "", field2: "", field3: "" }
 const form = createForm(initialState)
 
-// retrieve all of the form data
-form.data.get()
+// retrieve all of the form values
+form.values.get()
 
-// replace all form data with new one
-form.data.set({ field1: "foo", field2: "bar" })
+// replace all form values with new one
+form.values.set({ field1: "foo", field2: "bar" })
 
-// add / replace some of the data with new one
-form.data.add({ field3: "baz" })
+// add / replace some of the values with new one
+form.values.add({ field3: "baz" })
 
-// reset data back to its initial state
-form.data.reset()
+// reset values back to its initial state
+form.values.reset()
 
 // alternatively you can provide new state that should be used as initialState
-form.data.reset({ field1: "-", field2: "-", field3: "-" })
+form.values.reset({ field1: "-", field2: "-", field3: "-" })
 
 // retrieve a spefcific form field value
-form.data.getAt("path.to.field")
+form.values.getAt("path.to.field")
 
 // replace a specific form field value
-form.data.setAt("path.to.field", "value")
+form.values.setAt("path.to.field", "value")
 
 // check if form has a certain value
-form.data.hasAt("path.to.field")
+form.values.hasAt("path.to.field")
 ```
 
 ## Validation logic
@@ -234,7 +234,7 @@ const form = createForm({
   user: { firstName: "" }
 })
 	.validator(async (form) => {
-    const data = form.data.get()
+    const values = form.values.get()
     
     // some validation logic ...
     
@@ -329,7 +329,7 @@ form.errors.clearAt(["path.to.field1", "path.to.field2"])
 
 ## Submit form and provide feedback
 
-To submit a form to an API you need to provide a form handler. This piece of logic is responsible for extracting form data, sending data to an endpoint, handling remote errors, providing meaningful feedback to the form consumers / presentation layer.
+To submit a form to an API you need to provide a form handler. This piece of logic is responsible for extracting form values, sending data to an endpoint, handling remote errors, providing meaningful feedback to the form consumers / presentation layer.
 
 ```ts
 import { createForm } from "@bytesoftio/form"
@@ -337,7 +337,7 @@ import { createForm } from "@bytesoftio/form"
 const form = createForm()
 	.handler(async form => {
 		try {
-      const result = await sendFormData(form.data.get())
+      const result = await sendFormData(form.values.get())
       
      	form.result.set({ success: "Data sent succefully", result })
     } catch (error) {
