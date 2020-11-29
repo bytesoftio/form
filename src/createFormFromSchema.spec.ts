@@ -7,7 +7,7 @@ import {
 describe("createFromFromSchema", () => {
   it("creates from from schema with default values", async () => {
     const schema = object({ foo: value('bar').string().oneOf(["foo"]) })
-    const form = createFormFromSchema<{ foo: string }>(schema)
+    const form = createFormFromSchema<{ foo: string }, { error?: any }>(schema)
 
     expect(form.values.getAt("foo")).toBe('bar')
 
