@@ -23,6 +23,16 @@ export type FormValidateOptions = { changedFieldsOnly?: boolean, keepPreviousErr
 export type FormSubmitOptions = { validate?: boolean }
 export type FormErrorsCallback = (newErrors: ValidationResult | undefined) => void
 
+export type DepsOptions = {
+  values?: boolean
+  dirtyFields?: boolean
+  changedFields?: boolean
+  submitting?: boolean
+  submitted?: boolean
+  errors?: boolean
+  result?: boolean
+}
+
 export type FormConfig<TValue extends object, TResult extends object> = {
   validators: FormValidator<TValue, TResult>[]
   schemas: ObjectSchema<TValue>[]
@@ -98,4 +108,6 @@ export interface ObservableForm<TValue extends object = any, TResult extends obj
   handler(handler: FormHandler<TValue, TResult>): this
 
   listen(callback: FormCallback<TValue, TResult>, notifyImmediately?: boolean): this
+
+  deps(field: string | string[], options?: DepsOptions): any[]
 }

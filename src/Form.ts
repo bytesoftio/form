@@ -1,25 +1,37 @@
 import {
+  DepsOptions,
   FormCallback,
   FormConfig,
   FormHandler,
-  FormSubmitOptions, FormValidateOptions,
+  FormSubmitOptions,
+  FormValidateOptions,
   FormValidator,
-  ObservableForm,
   ObservableErrors,
+  ObservableForm,
   ObservableFormFields,
   ObservableFormValues,
 } from "./types"
-import { createValue, ObservableValue } from "@bytesoftio/value"
+import {
+  createValue,
+  ObservableValue,
+} from "@bytesoftio/value"
 import { createFormValues } from "./createFormValues"
 import { createFormFields } from "./createFormFields"
 import { createFormErrors } from "./createFormErrors"
-import { keys, merge, uniq } from "lodash"
+import {
+  keys,
+  merge,
+  isArray,
+} from "lodash"
 import {
   createValidationResult,
   ObjectSchema,
   ValidationResult,
 } from "@bytesoftio/schema"
-import { createStore, ObservableStore } from "@bytesoftio/store"
+import {
+  createStore,
+  ObservableStore,
+} from "@bytesoftio/store"
 import { isEmptyErrorsObject } from "./isEmptyErrorsObject"
 
 export class Form<TValues extends object = any, TResult extends object = any> implements ObservableForm<TValues, TResult> {
@@ -131,7 +143,7 @@ export class Form<TValues extends object = any, TResult extends object = any> im
       } catch (error) {
         this.submitting.set(false)
 
-        console.error(`There was an error in form submit handler #${index}:`, error)
+        console.error(`There was an error in form submit handler #${ index }:`, error)
         throw error
       }
     }
@@ -151,7 +163,7 @@ export class Form<TValues extends object = any, TResult extends object = any> im
       try {
         return await validator(this)
       } catch (error) {
-        console.error(`There was an error in form validator #${index}:`, error)
+        console.error(`There was an error in form validator #${ index }:`, error)
         throw error
       }
     }))
@@ -160,7 +172,7 @@ export class Form<TValues extends object = any, TResult extends object = any> im
       try {
         return createValidationResult(await schema.validateAsync(this.values.get()))
       } catch (error) {
-        console.error(`There was an error in form schema #${index}:`, error)
+        console.error(`There was an error in form schema #${ index }:`, error)
         throw error
       }
     }))
@@ -195,6 +207,29 @@ export class Form<TValues extends object = any, TResult extends object = any> im
     }
 
     return isEmptyErrorsObject(newErrors) ? undefined : newErrors
+  }
+
+  deps(field: string | string[], options: DepsOptions = {}): any[] {
+    const fields = isArray(field) ? field : [field]
+    const values = options.values === false ? [] : fields.map((field) => this.values.getAt(field))
+    const errors = options.errors === false ? [] : fields.map((field) => this.errors.getAt(field))
+    const dirtyFields = options.dirtyFields === false ? [] : fields.map((field) => this.dirtyFields.has(field))
+    const changedFields = options.changedFields === false ? [] : fields.map((field) => this.changedFields.has(field))
+    const result = options.result === false ? undefined : this.result.get()
+    const submitting = options.submitting === false ? undefined : this.submitting.get()
+    const submitted = options.submitted === false ? undefined : this.submitted.get()
+
+    const deps = [
+      JSON.stringify(values),
+      JSON.stringify(errors),
+      JSON.stringify(dirtyFields),
+      JSON.stringify(changedFields),
+      JSON.stringify(result),
+      JSON.stringify(submitting),
+      JSON.stringify(submitted)
+    ]
+
+    return deps
   }
 
   protected setupValidateOnChange() {

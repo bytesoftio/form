@@ -450,4 +450,87 @@ describe("Form", () => {
     expect(listener).toHaveBeenCalledTimes(10)
     expect(listener).toHaveBeenCalledWith(form)
   })
+
+  it("deps", () => {
+    const form = new Form({ foo: "foo", bar: "bar" })
+
+    expect(form.deps(["foo", "bar"])).toEqual([`["foo","bar"]`, `[null,null]`, `[false,false]`, `[false,false]`, `{}`, `false`, `false`])
+
+    form.values.setAt("foo", "fooz")
+
+    expect(form.deps(["foo", "bar"])).toEqual([`["fooz","bar"]`, `[null,null]`, `[true,false]`, `[true,false]`, `{}`, `false`, `false`])
+
+    form.errors.setAt("foo", ["error"])
+
+    expect(form.deps(["foo", "bar"])).toEqual([`["fooz","bar"]`, `[["error"],null]`, `[true,false]`, `[true,false]`, `{}`, `false`, `false`])
+
+    form.submitting.set(true)
+
+    expect(form.deps(["foo", "bar"])).toEqual([`["fooz","bar"]`, `[["error"],null]`, `[true,false]`, `[true,false]`, `{}`, `true`, `false`])
+
+    form.submitted.set(true)
+
+    expect(form.deps(["foo", "bar"])).toEqual([`["fooz","bar"]`, `[["error"],null]`, `[true,false]`, `[true,false]`, `{}`, `true`, `true`])
+
+    form.result.set({status: "ok"})
+
+    expect(form.deps(["foo", "bar"])).toEqual([`["fooz","bar"]`, `[["error"],null]`, `[true,false]`, `[true,false]`, `{"status":"ok"}`, `true`, `true`])
+
+    form.values.setAt("bar", "barz")
+
+    expect(form.deps(["foo", "bar"])).toEqual([`["fooz","barz"]`, `[["error"],null]`, `[true,true]`, `[true,true]`, `{"status":"ok"}`, `true`, `true`])
+
+    form.errors.setAt("bar", ["yolo"])
+
+    expect(form.deps(["foo", "bar"])).toEqual([`["fooz","barz"]`, `[["error"],["yolo"]]`, `[true,true]`, `[true,true]`, `{"status":"ok"}`, `true`, `true`])
+
+    expect(form.deps(["foo", "bar"], {
+      result: false
+    })).toEqual([`["fooz","barz"]`, `[["error"],["yolo"]]`, `[true,true]`, `[true,true]`, undefined, `true`, `true`])
+
+    expect(form.deps(["foo", "bar"], {
+      result: false,
+      submitting: false
+    })).toEqual([`["fooz","barz"]`, `[["error"],["yolo"]]`, `[true,true]`, `[true,true]`, undefined, undefined, `true`])
+
+    expect(form.deps(["foo", "bar"], {
+      result: false,
+      submitting: false,
+      submitted: false
+    })).toEqual([`["fooz","barz"]`, `[["error"],["yolo"]]`, `[true,true]`, `[true,true]`, undefined, undefined, undefined])
+
+    expect(form.deps(["foo", "bar"], {
+      result: false,
+      submitting: false,
+      submitted: false,
+      changedFields: false
+    })).toEqual([`["fooz","barz"]`, `[["error"],["yolo"]]`, `[true,true]`, `[]`, undefined, undefined, undefined])
+
+    expect(form.deps(["foo", "bar"], {
+      result: false,
+      submitting: false,
+      submitted: false,
+      changedFields: false,
+      dirtyFields: false
+    })).toEqual([`["fooz","barz"]`, `[["error"],["yolo"]]`, `[]`, `[]`, undefined, undefined, undefined])
+
+    expect(form.deps(["foo", "bar"], {
+      result: false,
+      submitting: false,
+      submitted: false,
+      changedFields: false,
+      dirtyFields: false,
+      errors: false,
+    })).toEqual([`["fooz","barz"]`, `[]`, `[]`, `[]`, undefined, undefined, undefined])
+
+    expect(form.deps(["foo", "bar"], {
+      result: false,
+      submitting: false,
+      submitted: false,
+      changedFields: false,
+      dirtyFields: false,
+      errors: false,
+      values: false,
+    })).toEqual([`[]`, `[]`, `[]`, `[]`, undefined, undefined, undefined])
+  })
 })

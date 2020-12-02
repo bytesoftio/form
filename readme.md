@@ -22,6 +22,7 @@
 - [Dirty fields and changed fields](#dirty-fields-and-changed-fields)
 - [Status indicators](#status-indicators)
 - [Usage with React](#usage-with-react)
+  - [Isolating fields from unnecessary re-renders](#isolating-fields-from-unnecessary-re-renders)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -444,3 +445,39 @@ form.submitted.get()
 ## Usage with React
 
 There is a very easy to use, hooks based, React integration for this library. That also comes with bindings for  basic HTML input elements. Please take a look at [@bytesoftio/use-form](https://github.com/bytesoftio/use-form)
+
+
+### Isolating fields from unnecessary re-renders
+
+In bigger forms you might want to isolate your fields from unnecessary re-renders. This can very easily be achieved using the [@bytesoftio/isolate](https://github.com/bytesoftio/isolate) package.
+
+```tsx
+import React, { useState } from "react"
+import { createForm } from "@bytsoftio/form"
+import { useForm } from "@bytsoftio/use-form"
+
+const Component = () => {
+  const form = useForm(() => createForm({ field1: "foo", field2: "bar" }))
+  const [someValue, setSomeValue] = useState("some state")
+
+  return (
+    <form>
+      <Isolate deps={form.deps("field1")}>
+        This section will only ever re-render when some of shared form properties change, like: `submitting`, `submitted` or `result`, or when one of the field related properties receives a change speicifc to this field, like: `errors`, `values`, `changedFields` or `dirtyFields`. 
+      </Isolate>
+      
+      <Isolate deps={form.deps(["field1", "field2"])}>
+        This section will change when one of the two fields receives a relevant change
+      </Isolate>
+
+      <Isolate deps={form.deps(["field1", "field2"], { errors: false })}>
+        This block will NOT re-render if there is an error for one of the two fields.
+      </Isolate>
+
+      <Isolate deps={[...form.deps(["field1", "field2"]), someValue]}>
+        Include an aditional, custom, value to the list of dependencies for a re-render.
+      </Isolate>
+    </form>
+  )
+}
+```
