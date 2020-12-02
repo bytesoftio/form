@@ -11,14 +11,14 @@ import {
   StoreCallback,
 } from "@bytesoftio/store"
 
-export type CreateForm = <TValue extends object = any, TResult extends object = any>(initialValue: TValue) => ObservableForm<TValue, TResult>
-export type CreateFormFromSchema = <TValue extends object = any, TResult extends object = any>(schema: ObjectSchema<TValue>) => ObservableForm<TValue, TResult>
+export type CreateForm = <TValue extends object = any, TResult = any>(initialValue: TValue) => ObservableForm<TValue, TResult>
+export type CreateFormFromSchema = <TValue extends object = any, TResult = any>(schema: ObjectSchema<TValue>) => ObservableForm<TValue, TResult>
 export type CreateFormErrors = (initialValue?: ValidationResult) => ObservableErrors
 export type CreateFormFields = (initialValue?: string[]) => ObservableFormFields
 export type CreateFormValues = <TValue extends object>(initialValue: TValue | undefined, dirtyFields: ObservableFormFields, changedFields: ObservableFormFields) => ObservableFormValues<TValue>
-export type FormValidator<TValue extends object, TResult extends object> = (form: ObservableForm<TValue, TResult>) => Promise<ValidationResult | undefined> | ValidationResult | undefined
-export type FormCallback<TValue extends object, TResult extends object> = (form: ObservableForm<TValue, TResult>) => void
-export type FormHandler<TValue extends object, TResult extends object> = (form: ObservableForm<TValue, TResult>) => Promise<TResult | undefined> | TResult | undefined
+export type FormValidator<TValue extends object, TResult> = (form: ObservableForm<TValue, TResult>) => Promise<ValidationResult | undefined> | ValidationResult | undefined
+export type FormCallback<TValue extends object, TResult> = (form: ObservableForm<TValue, TResult>) => void
+export type FormHandler<TValue extends object, TResult> = (form: ObservableForm<TValue, TResult>) => Promise<TResult | undefined> | TResult | undefined
 export type FormValidateOptions = { changedFieldsOnly?: boolean, keepPreviousErrors?: boolean, persistErrors?: boolean }
 export type FormSubmitOptions = { validate?: boolean }
 export type FormErrorsCallback = (newErrors: ValidationResult | undefined) => void
@@ -33,7 +33,7 @@ export type DepsOptions = {
   result?: boolean
 }
 
-export type FormConfig<TValue extends object, TResult extends object> = {
+export type FormConfig<TValue extends object, TResult> = {
   validators: FormValidator<TValue, TResult>[]
   schemas: ObjectSchema<TValue>[]
   handler: FormHandler<TValue, TResult> | undefined
@@ -88,7 +88,7 @@ export interface ObservableFormValues<TValue extends object> {
   listen(callback: StoreCallback<TValue>, notifyImmediately?: boolean): void
 }
 
-export interface ObservableForm<TValue extends object = any, TResult extends object = any> {
+export interface ObservableForm<TValue extends object = any, TResult = any> {
   config: FormConfig<TValue, TResult>
   values: ObservableFormValues<TValue>
   dirtyFields: ObservableFormFields

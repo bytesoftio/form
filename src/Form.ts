@@ -28,12 +28,9 @@ import {
   ObjectSchema,
   ValidationResult,
 } from "@bytesoftio/schema"
-import {
-  createStore,
-} from "@bytesoftio/store"
 import { isEmptyErrorsObject } from "./isEmptyErrorsObject"
 
-export class Form<TValues extends object = any, TResult extends object = any> implements ObservableForm<TValues, TResult> {
+export class Form<TValues extends object = any, TResult = any> implements ObservableForm<TValues, TResult> {
   config: FormConfig<TValues, TResult>
   values: ObservableFormValues<TValues>
   dirtyFields: ObservableFormFields
