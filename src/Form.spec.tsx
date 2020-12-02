@@ -356,6 +356,55 @@ describe("Form", () => {
     expect(form.errors.get()!.foo.length).toBe(1)
   })
 
+  it("validates changed fields but keeps previous errors", async () => {
+    const form = new Form({ foo: "ba", bar: "ba" })
+      .schema(object({ foo: string().min(3), bar: string().min(3) }))
+
+    const errors1 = await form.validate({changedFieldsOnly: false, keepPreviousErrors: false})
+
+    expect(errors1 !== undefined).toBe(true)
+    expect(errors1?.foo?.length).toBe(1)
+    expect(errors1?.bar?.length).toBe(1)
+
+    const errors2 = await form.validate({changedFieldsOnly: true, keepPreviousErrors: false})
+
+    expect(errors2 === undefined).toBe(true)
+
+    form.changedFields.add("foo")
+
+    const errors3 = await form.validate({changedFieldsOnly: true, keepPreviousErrors: false})
+
+    expect(errors3 !== undefined).toBe(true)
+    expect(errors3?.foo?.length).toBe(1)
+    expect(errors3?.bar?.length).toBe(undefined)
+
+    const errors4 = await form.validate({changedFieldsOnly: false, keepPreviousErrors: false})
+
+    expect(errors4 !== undefined).toBe(true)
+    expect(errors4?.foo?.length).toBe(1)
+    expect(errors4?.bar?.length).toBe(1)
+
+    const errors5 = await form.validate({changedFieldsOnly: false, keepPreviousErrors: true})
+
+    expect(errors5 !== undefined).toBe(true)
+    expect(errors5?.foo?.length).toBe(1)
+    expect(errors5?.bar?.length).toBe(1)
+
+    const errors6 = await form.validate({changedFieldsOnly: true})
+
+    expect(errors6 !== undefined).toBe(true)
+    expect(errors6?.foo?.length).toBe(1)
+    expect(errors6?.bar?.length).toBe(1)
+
+    form.values.setAt("bar", "bar")
+
+    const errors7 = await form.validate({changedFieldsOnly: true})
+
+    expect(errors7 !== undefined).toBe(true)
+    expect(errors7?.foo?.length).toBe(1)
+    expect(errors7?.bar?.length).toBe(undefined)
+  })
+
   it("tracks a field as dirty and changed", () => {
     const form = new Form({ foo: "bar" })
 

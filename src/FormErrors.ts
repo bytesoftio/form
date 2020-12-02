@@ -34,8 +34,8 @@ export class FormErrors implements ObservableErrors {
     return errors
   }
 
-  set(newErrors: ValidationResult): void {
-    this.value.set(newErrors)
+  set(newErrors: ValidationResult | undefined): void {
+    this.value.set(newErrors || {})
   }
 
   setAt(path: string, newErrors: string[]): void {
@@ -45,8 +45,8 @@ export class FormErrors implements ObservableErrors {
     this.value.set(errors)
   }
 
-  add(newErrors: Partial<ValidationResult>): void {
-    this.value.add(newErrors)
+  add(newErrors: Partial<ValidationResult> | undefined): void {
+    this.value.add(newErrors || {})
   }
 
   addAt(path: string, newErrors: string | string[]): void {

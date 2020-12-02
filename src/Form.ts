@@ -13,7 +13,7 @@ import { createValue, ObservableValue } from "@bytesoftio/value"
 import { createFormValues } from "./createFormValues"
 import { createFormFields } from "./createFormFields"
 import { createFormErrors } from "./createFormErrors"
-import { keys, merge } from "lodash"
+import { keys, merge, uniq } from "lodash"
 import {
   createValidationResult,
   ObjectSchema,
@@ -143,6 +143,7 @@ export class Form<TValues extends object = any, TResult extends object = any> im
 
   async validate(options?: FormValidateOptions): Promise<ValidationResult | undefined> {
     const changedFieldsOnly = options?.changedFieldsOnly === true || (this.config.validateChangedFieldsOnly && options?.changedFieldsOnly !== false)
+    const keepPreviousErrors = options?.keepPreviousErrors !== false
 
     const validatorErrors = await Promise.all(this.config.validators.map(async (validator, index) => {
       try {
@@ -162,21 +163,32 @@ export class Form<TValues extends object = any, TResult extends object = any> im
       }
     }))
 
-    const allErrors = [...validatorErrors, ...schemaErrors]
+    const errorsFromDifferentSources = [...validatorErrors, ...schemaErrors]
 
-    const errors = allErrors.reduce((errors, errorSet) => {
+    const newErrors = errorsFromDifferentSources.reduce((errors, errorSet) => {
       return merge({}, errors, errorSet)
     }, {})!
 
     if (changedFieldsOnly) {
-      keys(errors).forEach(key => {
-        if ( ! this.changedFields.get().includes(key)) {
-          delete errors[key]
+      const oldErrorKeys = keys(this.errors.get())
+      const newErrorKeys = keys(newErrors)
+      const changedFields = this.changedFields.get()
+
+      newErrorKeys.map(key => {
+        const fieldHasChanged = changedFields.includes(key)
+        const fieldAlreadyHadAnError = oldErrorKeys.includes(key)
+
+        if (fieldHasChanged) {
+          // keep
+        } else if (fieldAlreadyHadAnError && keepPreviousErrors) {
+          // keep
+        } else {
+          delete newErrors[key]
         }
       })
     }
 
-    this.errors.set(errors)
+    this.errors.set(newErrors)
 
     return this.errors.get()
   }
