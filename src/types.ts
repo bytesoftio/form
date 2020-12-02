@@ -97,5 +97,5 @@ export interface ObservableForm<TValue extends object = any, TResult extends obj
   schema(handler: ObjectSchema<TValue>): this
   handler(handler: FormHandler<TValue, TResult>): this
 
-  listen(callback: FormCallback<TValue, TResult>, notifyImmediately?: boolean): void
+  listen(callback: FormCallback<TValue, TResult>, notifyImmediately?: boolean): this
 }

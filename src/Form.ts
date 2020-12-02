@@ -62,7 +62,7 @@ export class Form<TValues extends object = any, TResult extends object = any> im
     this.result.reset()
   }
 
-  listen(callback: FormCallback<TValues, TResult>, notifyImmediately?: boolean): void {
+  listen(callback: FormCallback<TValues, TResult>, notifyImmediately?: boolean): this {
     const formCallback = () => callback(this)
 
     this.values.listen(formCallback, notifyImmediately)
@@ -72,6 +72,8 @@ export class Form<TValues extends object = any, TResult extends object = any> im
     this.changedFields.listen(formCallback, notifyImmediately)
     this.errors.listen(formCallback, notifyImmediately)
     this.result.listen(formCallback, notifyImmediately)
+
+    return this
   }
 
   configure(config: Partial<FormConfig<TValues, TResult>>): this {

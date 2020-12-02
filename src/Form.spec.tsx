@@ -374,7 +374,9 @@ describe("Form", () => {
     const form = new Form({ foo: { bar: "baz" } })
     let listener = jest.fn()
 
-    form.listen(listener)
+    const returnedForm = form.listen(listener)
+
+    expect(returnedForm === form).toBe(true)
 
     expect(listener).toHaveBeenCalledTimes(7)
     expect(listener).toHaveBeenCalledWith(form)
