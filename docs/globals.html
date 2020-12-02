@@ -2851,9 +2851,9 @@ img {
 <span style="color: #000000">        </span><span style="color: #008000">// pretend to make an api call here </span>
 <span style="color: #000000">        </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #001080">user</span><span style="color: #000000"> = </span><span style="color: #0000FF">await</span><span style="color: #000000"> </span><span style="color: #795E26">createUser</span><span style="color: #000000">(</span><span style="color: #001080">form</span><span style="color: #000000">.</span><span style="color: #001080">values</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">())</span>
 
-<span style="color: #000000">        </span><span style="color: #001080">form</span><span style="color: #000000">.</span><span style="color: #001080">result</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">({ </span><span style="color: #001080">success:</span><span style="color: #000000"> </span><span style="color: #A31515">"User created"</span><span style="color: #000000">, </span><span style="color: #001080">user</span><span style="color: #000000"> })</span>
+<span style="color: #000000">        </span><span style="color: #0000FF">return</span><span style="color: #000000"> { </span><span style="color: #001080">success:</span><span style="color: #000000"> </span><span style="color: #A31515">"User created"</span><span style="color: #000000">, </span><span style="color: #001080">user</span><span style="color: #000000"> }</span>
 <span style="color: #000000">      } </span><span style="color: #0000FF">catch</span><span style="color: #000000"> (</span><span style="color: #001080">error</span><span style="color: #000000">) {</span>
-<span style="color: #000000">        </span><span style="color: #001080">form</span><span style="color: #000000">.</span><span style="color: #001080">result</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">({ </span><span style="color: #001080">error:</span><span style="color: #000000"> </span><span style="color: #A31515">"Could not create user"</span><span style="color: #000000"> })</span>
+<span style="color: #000000">        </span><span style="color: #0000FF">return</span><span style="color: #000000"> { </span><span style="color: #001080">error:</span><span style="color: #000000"> </span><span style="color: #A31515">"Could not create user"</span><span style="color: #000000"> }</span>
 <span style="color: #000000">      }</span>
 <span style="color: #000000">    })</span>
 <span style="color: #000000">}</span></code></pre></code></pre>
@@ -2948,7 +2948,7 @@ img {
 <span style="color: #000000">  </span><span style="color: #001080">title:</span><span style="color: #000000"> </span><span style="color: #A31515">""</span><span style="color: #000000">, </span>
 <span style="color: #000000">  </span><span style="color: #001080">user:</span><span style="color: #000000"> { </span><span style="color: #001080">firstName:</span><span style="color: #000000"> </span><span style="color: #A31515">""</span><span style="color: #000000"> }</span>
 <span style="color: #000000">})</span>
-<span style="color: #000000">    .</span><span style="color: #795E26">validator</span><span style="color: #000000">(</span><span style="color: #0000FF">async</span><span style="color: #000000"> (</span><span style="color: #001080">form</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  .</span><span style="color: #795E26">validator</span><span style="color: #000000">(</span><span style="color: #0000FF">async</span><span style="color: #000000"> (</span><span style="color: #001080">form</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
 <span style="color: #000000">    </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #001080">values</span><span style="color: #000000"> = </span><span style="color: #001080">form</span><span style="color: #000000">.</span><span style="color: #001080">values</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">()</span>
 
 <span style="color: #000000">    </span><span style="color: #008000">// some validation logic ...</span>
@@ -2957,7 +2957,7 @@ img {
 <span style="color: #000000">      </span><span style="color: #001080">title:</span><span style="color: #000000"> [</span><span style="color: #A31515">"Value missing"</span><span style="color: #000000">],</span>
 <span style="color: #000000">      </span><span style="color: #A31515">"user.firstName"</span><span style="color: #001080">:</span><span style="color: #000000"> [</span><span style="color: #A31515">"Value missing"</span><span style="color: #000000">]</span>
 <span style="color: #000000">    }</span>
-<span style="color: #000000">  })</span></code></pre></code></pre>
+<span style="color: #000000">})</span></code></pre></code></pre>
 			<p>Additionally, it is possible to provide a validation schema powered by the very easy to use <a href="https://github.com/bytesoftio/schema">@bytesoftio/schema</a> package.</p>
 			<pre><code class="language-ts"><pre class="shiki" style="background-color: #FFFFFF"><code><span style="color: #0000FF">import</span><span style="color: #000000"> { </span><span style="color: #001080">createForm</span><span style="color: #000000"> } </span><span style="color: #0000FF">from</span><span style="color: #000000"> </span><span style="color: #A31515">"@bytesoftio/form"</span>
 <span style="color: #0000FF">import</span><span style="color: #000000"> { </span><span style="color: #001080">object</span><span style="color: #000000">, </span><span style="color: #001080">string</span><span style="color: #000000"> } </span><span style="color: #0000FF">from</span><span style="color: #000000"> </span><span style="color: #A31515">"@bytesoftio/schema"</span>
@@ -2966,7 +2966,7 @@ img {
 <span style="color: #000000">  </span><span style="color: #001080">title:</span><span style="color: #000000"> </span><span style="color: #A31515">""</span><span style="color: #000000">, </span>
 <span style="color: #000000">  </span><span style="color: #001080">user:</span><span style="color: #000000"> { </span><span style="color: #001080">firstName:</span><span style="color: #000000"> </span><span style="color: #A31515">""</span><span style="color: #000000"> }</span>
 <span style="color: #000000">})</span>
-<span style="color: #000000">    .</span><span style="color: #795E26">schema</span><span style="color: #000000">(</span><span style="color: #795E26">object</span><span style="color: #000000">({</span>
+<span style="color: #000000">  .</span><span style="color: #795E26">schema</span><span style="color: #000000">(</span><span style="color: #795E26">object</span><span style="color: #000000">({</span>
 <span style="color: #000000">    </span><span style="color: #001080">title:</span><span style="color: #000000"> </span><span style="color: #795E26">string</span><span style="color: #000000">().</span><span style="color: #795E26">between</span><span style="color: #000000">(</span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">50</span><span style="color: #000000">),</span>
 <span style="color: #000000">    </span><span style="color: #001080">user:</span><span style="color: #000000"> </span><span style="color: #795E26">object</span><span style="color: #000000">({ </span><span style="color: #001080">firstName:</span><span style="color: #000000"> </span><span style="color: #795E26">string</span><span style="color: #000000">().</span><span style="color: #795E26">between</span><span style="color: #000000">(</span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">50</span><span style="color: #000000">) })</span>
 <span style="color: #000000">  }))</span></code></pre></code></pre>
@@ -3050,14 +3050,14 @@ img {
 <span style="color: #000000">        </span><span style="color: #0000FF">try</span><span style="color: #000000"> {</span>
 <span style="color: #000000">      </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #001080">result</span><span style="color: #000000"> = </span><span style="color: #0000FF">await</span><span style="color: #000000"> </span><span style="color: #795E26">sendFormData</span><span style="color: #000000">(</span><span style="color: #001080">form</span><span style="color: #000000">.</span><span style="color: #001080">values</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">())</span>
 
-<span style="color: #000000">         </span><span style="color: #001080">form</span><span style="color: #000000">.</span><span style="color: #001080">result</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">({ </span><span style="color: #001080">success:</span><span style="color: #000000"> </span><span style="color: #A31515">"Data sent succefully"</span><span style="color: #000000">, </span><span style="color: #001080">result</span><span style="color: #000000"> })</span>
+<span style="color: #000000">         </span><span style="color: #0000FF">return</span><span style="color: #000000">  { </span><span style="color: #001080">success:</span><span style="color: #000000"> </span><span style="color: #A31515">"Data sent succefully"</span><span style="color: #000000">, </span><span style="color: #001080">result</span><span style="color: #000000"> }</span>
 <span style="color: #000000">    } </span><span style="color: #0000FF">catch</span><span style="color: #000000"> (</span><span style="color: #001080">error</span><span style="color: #000000">) {</span>
-<span style="color: #000000">      </span><span style="color: #001080">form</span><span style="color: #000000">.</span><span style="color: #001080">result</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">({ </span><span style="color: #001080">error:</span><span style="color: #000000"> </span><span style="color: #A31515">"Could not send data"</span><span style="color: #000000"> })</span>
+<span style="color: #000000">      </span><span style="color: #0000FF">return</span><span style="color: #000000"> { </span><span style="color: #001080">error:</span><span style="color: #000000"> </span><span style="color: #A31515">"Could not send data"</span><span style="color: #000000"> }</span>
 <span style="color: #000000">    }</span>
 <span style="color: #000000">  })</span></code></pre></code></pre>
-			<p>To provide meaningful feedback to form consumers you can use the <code>form.result</code> object. Any kind of feedback coming from a form handler, except validation messages, should go into the <code>form.result</code> object, those might be things like status messages, data received from an endpoint after creating an entity on the remote, etc. Everything can be statically typed, take a look at <a href="#quick-start">quick start</a> to learn more about this.</p>
+			<p>To provide meaningful feedback to form consumers, handler can return any kind of data, this data will be available as the result of a <code>submit()</code> call or inside the <code>form.result</code> observable property. Everything can be statically typed, take a look at <a href="#quick-start">quick start</a> to learn more about this.</p>
 			<p>When submitting a form, validations are run automatically, you can prevent this by configuring the form accordingly, see <a href="#form-config">form config</a>, or setting a flag.</p>
-			<pre><code class="language-ts"><pre class="shiki" style="background-color: #FFFFFF"><code><span style="color: #001080">form</span><span style="color: #000000">.</span><span style="color: #795E26">submit</span><span style="color: #000000">({ </span><span style="color: #001080">validate:</span><span style="color: #000000"> </span><span style="color: #0000FF">false</span><span style="color: #000000"> })</span></code></pre></code></pre>
+			<pre><code class="language-ts"><pre class="shiki" style="background-color: #FFFFFF"><code><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #001080">result</span><span style="color: #000000"> = </span><span style="color: #0000FF">await</span><span style="color: #000000"> </span><span style="color: #001080">form</span><span style="color: #000000">.</span><span style="color: #795E26">submit</span><span style="color: #000000">({ </span><span style="color: #001080">validate:</span><span style="color: #000000"> </span><span style="color: #0000FF">false</span><span style="color: #000000"> })</span></code></pre></code></pre>
 			<a href="#reset-form-state" id="reset-form-state" style="color: inherit; text-decoration: none;">
 				<h2>Reset form state</h2>
 			</a>
@@ -3203,7 +3203,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Create<wbr>Form<span class="tsd-signature-symbol">:</span> &lt;TValue, TResult&gt;<span class="tsd-signature-symbol">(</span>initialValue<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="interfaces/observableform.html" class="tsd-signature-type">ObservableForm</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TResult</span><span class="tsd-signature-symbol">&gt;</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/bytesoftio/form/blob/c9db9d3/src/types.ts#L14">types.ts:14</a></li>
+						<li>Defined in <a href="https://github.com/bytesoftio/form/blob/a4e24b9/src/types.ts#L14">types.ts:14</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -3243,7 +3243,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Create<wbr>Form<wbr>Errors<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>initialValue<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ValidationResult</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="interfaces/observableerrors.html" class="tsd-signature-type">ObservableErrors</a></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/bytesoftio/form/blob/c9db9d3/src/types.ts#L16">types.ts:16</a></li>
+						<li>Defined in <a href="https://github.com/bytesoftio/form/blob/a4e24b9/src/types.ts#L16">types.ts:16</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -3274,7 +3274,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Create<wbr>Form<wbr>Fields<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>initialValue<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="interfaces/observableformfields.html" class="tsd-signature-type">ObservableFormFields</a></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/bytesoftio/form/blob/c9db9d3/src/types.ts#L17">types.ts:17</a></li>
+						<li>Defined in <a href="https://github.com/bytesoftio/form/blob/a4e24b9/src/types.ts#L17">types.ts:17</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -3305,7 +3305,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Create<wbr>Form<wbr>From<wbr>Schema<span class="tsd-signature-symbol">:</span> &lt;TValue, TResult&gt;<span class="tsd-signature-symbol">(</span>schema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ObjectSchema</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="interfaces/observableform.html" class="tsd-signature-type">ObservableForm</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TResult</span><span class="tsd-signature-symbol">&gt;</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/bytesoftio/form/blob/c9db9d3/src/types.ts#L15">types.ts:15</a></li>
+						<li>Defined in <a href="https://github.com/bytesoftio/form/blob/a4e24b9/src/types.ts#L15">types.ts:15</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -3345,7 +3345,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Create<wbr>Form<wbr>Values<span class="tsd-signature-symbol">:</span> &lt;TValue&gt;<span class="tsd-signature-symbol">(</span>initialValue<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span>, dirtyFields<span class="tsd-signature-symbol">: </span><a href="interfaces/observableformfields.html" class="tsd-signature-type">ObservableFormFields</a>, changedFields<span class="tsd-signature-symbol">: </span><a href="interfaces/observableformfields.html" class="tsd-signature-type">ObservableFormFields</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="interfaces/observableformvalues.html" class="tsd-signature-type">ObservableFormValues</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/bytesoftio/form/blob/c9db9d3/src/types.ts#L18">types.ts:18</a></li>
+						<li>Defined in <a href="https://github.com/bytesoftio/form/blob/a4e24b9/src/types.ts#L18">types.ts:18</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -3388,7 +3388,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Deps<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>changedFields<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">; </span>dirtyFields<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">; </span>errors<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">; </span>result<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">; </span>submitted<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">; </span>submitting<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">; </span>values<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> }</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/bytesoftio/form/blob/c9db9d3/src/types.ts#L26">types.ts:26</a></li>
+						<li>Defined in <a href="https://github.com/bytesoftio/form/blob/a4e24b9/src/types.ts#L26">types.ts:26</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -3424,7 +3424,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Form<wbr>Callback&lt;TValue, TResult&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>form<span class="tsd-signature-symbol">: </span><a href="interfaces/observableform.html" class="tsd-signature-type">ObservableForm</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TResult</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/bytesoftio/form/blob/c9db9d3/src/types.ts#L20">types.ts:20</a></li>
+						<li>Defined in <a href="https://github.com/bytesoftio/form/blob/a4e24b9/src/types.ts#L20">types.ts:20</a></li>
 					</ul>
 				</aside>
 				<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -3461,10 +3461,10 @@ img {
 			<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-has-type-parameter">
 				<a name="formconfig" class="tsd-anchor"></a>
 				<h3>Form<wbr>Config</h3>
-				<div class="tsd-signature tsd-kind-icon">Form<wbr>Config&lt;TValue, TResult&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>handlers<span class="tsd-signature-symbol">: </span><a href="globals.html#formhandler" class="tsd-signature-type">FormHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TResult</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>schemas<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ObjectSchema</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>validateChangedFieldsOnly<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>validateOnChange<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>validateOnSubmit<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>validators<span class="tsd-signature-symbol">: </span><a href="globals.html#formvalidator" class="tsd-signature-type">FormValidator</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TResult</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span></div>
+				<div class="tsd-signature tsd-kind-icon">Form<wbr>Config&lt;TValue, TResult&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>handler<span class="tsd-signature-symbol">: </span><a href="globals.html#formhandler" class="tsd-signature-type">FormHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TResult</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">; </span>schemas<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ObjectSchema</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>validateChangedFieldsOnly<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>validateOnChange<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>validateOnSubmit<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>validators<span class="tsd-signature-symbol">: </span><a href="globals.html#formvalidator" class="tsd-signature-type">FormValidator</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TResult</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/bytesoftio/form/blob/c9db9d3/src/types.ts#L36">types.ts:36</a></li>
+						<li>Defined in <a href="https://github.com/bytesoftio/form/blob/a4e24b9/src/types.ts#L36">types.ts:36</a></li>
 					</ul>
 				</aside>
 				<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -3480,7 +3480,7 @@ img {
 					<h4>Type declaration</h4>
 					<ul class="tsd-parameters">
 						<li class="tsd-parameter">
-							<h5>handlers<span class="tsd-signature-symbol">: </span><a href="globals.html#formhandler" class="tsd-signature-type">FormHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TResult</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></h5>
+							<h5>handler<span class="tsd-signature-symbol">: </span><a href="globals.html#formhandler" class="tsd-signature-type">FormHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TResult</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h5>
 						</li>
 						<li class="tsd-parameter">
 							<h5>schemas<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ObjectSchema</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></h5>
@@ -3506,7 +3506,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Form<wbr>Errors<wbr>Callback<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>newErrors<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ValidationResult</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/bytesoftio/form/blob/c9db9d3/src/types.ts#L24">types.ts:24</a></li>
+						<li>Defined in <a href="https://github.com/bytesoftio/form/blob/a4e24b9/src/types.ts#L24">types.ts:24</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -3534,10 +3534,10 @@ img {
 			<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-has-type-parameter">
 				<a name="formhandler" class="tsd-anchor"></a>
 				<h3>Form<wbr>Handler</h3>
-				<div class="tsd-signature tsd-kind-icon">Form<wbr>Handler&lt;TValue, TResult&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>form<span class="tsd-signature-symbol">: </span><a href="interfaces/observableform.html" class="tsd-signature-type">ObservableForm</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TResult</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">any</span></div>
+				<div class="tsd-signature tsd-kind-icon">Form<wbr>Handler&lt;TValue, TResult&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>form<span class="tsd-signature-symbol">: </span><a href="interfaces/observableform.html" class="tsd-signature-type">ObservableForm</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TResult</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TResult</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TResult</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/bytesoftio/form/blob/c9db9d3/src/types.ts#L21">types.ts:21</a></li>
+						<li>Defined in <a href="https://github.com/bytesoftio/form/blob/a4e24b9/src/types.ts#L21">types.ts:21</a></li>
 					</ul>
 				</aside>
 				<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -3554,7 +3554,7 @@ img {
 					<ul class="tsd-parameters">
 						<li class="tsd-parameter-signature">
 							<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
-								<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>form<span class="tsd-signature-symbol">: </span><a href="interfaces/observableform.html" class="tsd-signature-type">ObservableForm</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TResult</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">any</span></li>
+								<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>form<span class="tsd-signature-symbol">: </span><a href="interfaces/observableform.html" class="tsd-signature-type">ObservableForm</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TResult</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TResult</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TResult</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
 							</ul>
 							<ul class="tsd-descriptions">
 								<li class="tsd-description">
@@ -3564,7 +3564,7 @@ img {
 											<h5>form: <a href="interfaces/observableform.html" class="tsd-signature-type">ObservableForm</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TResult</span><span class="tsd-signature-symbol">&gt;</span></h5>
 										</li>
 									</ul>
-									<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">any</span></h4>
+									<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TResult</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TResult</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
 								</li>
 							</ul>
 						</li>
@@ -3577,7 +3577,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Form<wbr>Submit<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>validate<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> }</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/bytesoftio/form/blob/c9db9d3/src/types.ts#L23">types.ts:23</a></li>
+						<li>Defined in <a href="https://github.com/bytesoftio/form/blob/a4e24b9/src/types.ts#L23">types.ts:23</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -3595,7 +3595,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Form<wbr>Validate<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>changedFieldsOnly<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">; </span>keepPreviousErrors<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">; </span>persistErrors<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> }</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/bytesoftio/form/blob/c9db9d3/src/types.ts#L22">types.ts:22</a></li>
+						<li>Defined in <a href="https://github.com/bytesoftio/form/blob/a4e24b9/src/types.ts#L22">types.ts:22</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -3619,7 +3619,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Form<wbr>Validator&lt;TValue, TResult&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>form<span class="tsd-signature-symbol">: </span><a href="interfaces/observableform.html" class="tsd-signature-type">ObservableForm</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TValue</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TResult</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ValidationResult</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ValidationResult</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/bytesoftio/form/blob/c9db9d3/src/types.ts#L19">types.ts:19</a></li>
+						<li>Defined in <a href="https://github.com/bytesoftio/form/blob/a4e24b9/src/types.ts#L19">types.ts:19</a></li>
 					</ul>
 				</aside>
 				<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -3666,7 +3666,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/bytesoftio/form/blob/c9db9d3/src/createForm.ts#L4">createForm.ts:4</a></li>
+								<li>Defined in <a href="https://github.com/bytesoftio/form/blob/a4e24b9/src/createForm.ts#L4">createForm.ts:4</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>

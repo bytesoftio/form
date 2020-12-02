@@ -30,7 +30,6 @@ import {
 } from "@bytesoftio/schema"
 import {
   createStore,
-  ObservableStore,
 } from "@bytesoftio/store"
 import { isEmptyErrorsObject } from "./isEmptyErrorsObject"
 
@@ -42,11 +41,11 @@ export class Form<TValues extends object = any, TResult extends object = any> im
   submitting: ObservableValue<boolean>
   submitted: ObservableValue<boolean>
   errors: ObservableErrors
-  result: ObservableStore<TResult>
+  result: ObservableValue<TResult | undefined>
 
   constructor(initialValues: TValues) {
     this.config = {
-      handlers: [],
+      handler: () => undefined,
       validators: [],
       schemas: [],
       validateChangedFieldsOnly: false,
@@ -60,7 +59,7 @@ export class Form<TValues extends object = any, TResult extends object = any> im
     this.submitting = createValue<boolean>(false)
     this.submitted = createValue<boolean>(false)
     this.errors = createFormErrors()
-    this.result = createStore<TResult>({} as TResult)
+    this.result = createValue<TResult | undefined>(undefined)
 
     this.setupValidateOnChange()
   }
@@ -96,7 +95,7 @@ export class Form<TValues extends object = any, TResult extends object = any> im
   }
 
   handler(handler: FormHandler<TValues, TResult>): this {
-    this.config.handlers.push(handler)
+    this.config.handler = handler
 
     return this
   }
@@ -135,15 +134,15 @@ export class Form<TValues extends object = any, TResult extends object = any> im
       }
     }
 
-    for (const handler of this.config.handlers) {
-      const index = this.config.handlers.indexOf(handler)
-
+    if (this.config.handler) {
       try {
-        await handler(this)
+        const result = await this.config.handler(this)
+        this.result.set(result)
       } catch (error) {
+        console.error(`There was an error in form handler:`, error)
+
         this.submitting.set(false)
 
-        console.error(`There was an error in form submit handler #${ index }:`, error)
         throw error
       }
     }

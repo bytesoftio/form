@@ -68,7 +68,7 @@ describe("Form", () => {
     expect(form.dirtyFields.get()).toEqual([])
     expect(form.changedFields.get()).toEqual([])
     expect(form.errors.get()).toEqual(undefined)
-    expect(form.result.get()).toEqual({})
+    expect(form.result.get()).toEqual(undefined)
   })
 
   it("submits", async () => {
@@ -97,7 +97,7 @@ describe("Form", () => {
     expect(submitting).toEqual([false, true, false])
     expect(submitted).toEqual([false, true])
     expect(form.errors.get()).toEqual(undefined)
-    expect(form.result.get()).toEqual({})
+    expect(form.result.get()).toEqual(true)
   })
 
   it("handles rejections and thrown errors during submit", async () => {
@@ -442,35 +442,35 @@ describe("Form", () => {
 
     expect(returnedForm === form).toBe(true)
 
-    expect(listener).toHaveBeenCalledTimes(7)
+    expect(listener).toHaveBeenCalledTimes(6)
     expect(listener).toHaveBeenCalledWith(form)
 
     form.values.setAt("foo.bar", "yolo")
 
-    expect(listener).toHaveBeenCalledTimes(10)
+    expect(listener).toHaveBeenCalledTimes(9)
     expect(listener).toHaveBeenCalledWith(form)
   })
 
   it("deps", () => {
     const form = new Form({ foo: "foo", bar: "bar" })
 
-    expect(form.deps(["foo", "bar"])).toEqual([`["foo","bar"]`, `[null,null]`, `[false,false]`, `[false,false]`, `{}`, `false`, `false`])
+    expect(form.deps(["foo", "bar"])).toEqual([`["foo","bar"]`, `[null,null]`, `[false,false]`, `[false,false]`, undefined, `false`, `false`])
 
     form.values.setAt("foo", "fooz")
 
-    expect(form.deps(["foo", "bar"])).toEqual([`["fooz","bar"]`, `[null,null]`, `[true,false]`, `[true,false]`, `{}`, `false`, `false`])
+    expect(form.deps(["foo", "bar"])).toEqual([`["fooz","bar"]`, `[null,null]`, `[true,false]`, `[true,false]`, undefined, `false`, `false`])
 
     form.errors.setAt("foo", ["error"])
 
-    expect(form.deps(["foo", "bar"])).toEqual([`["fooz","bar"]`, `[["error"],null]`, `[true,false]`, `[true,false]`, `{}`, `false`, `false`])
+    expect(form.deps(["foo", "bar"])).toEqual([`["fooz","bar"]`, `[["error"],null]`, `[true,false]`, `[true,false]`, undefined, `false`, `false`])
 
     form.submitting.set(true)
 
-    expect(form.deps(["foo", "bar"])).toEqual([`["fooz","bar"]`, `[["error"],null]`, `[true,false]`, `[true,false]`, `{}`, `true`, `false`])
+    expect(form.deps(["foo", "bar"])).toEqual([`["fooz","bar"]`, `[["error"],null]`, `[true,false]`, `[true,false]`, undefined, `true`, `false`])
 
     form.submitted.set(true)
 
-    expect(form.deps(["foo", "bar"])).toEqual([`["fooz","bar"]`, `[["error"],null]`, `[true,false]`, `[true,false]`, `{}`, `true`, `true`])
+    expect(form.deps(["foo", "bar"])).toEqual([`["fooz","bar"]`, `[["error"],null]`, `[true,false]`, `[true,false]`, undefined, `true`, `true`])
 
     form.result.set({status: "ok"})
 

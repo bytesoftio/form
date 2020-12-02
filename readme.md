@@ -124,9 +124,9 @@ export const createUserForm = () => {
         // pretend to make an api call here 
         const user = await createUser(form.values.get())
 
-        form.result.set({ success: "User created", user })
+        return { success: "User created", user }
       } catch (error) {
-        form.result.set({ error: "Could not create user" })
+        return { error: "Could not create user" }
       }
     })
 }
@@ -235,16 +235,16 @@ const form = createForm({
   title: "", 
   user: { firstName: "" }
 })
-	.validator(async (form) => {
+  .validator(async (form) => {
     const values = form.values.get()
-    
+
     // some validation logic ...
     
     return {
       title: ["Value missing"],
       "user.firstName": ["Value missing"]
     }
-  })
+})
 ```
 
 Additionally, it is possible to provide a validation schema powered by the very easy to use [@bytesoftio/schema](https://github.com/bytesoftio/schema) package.
@@ -257,7 +257,7 @@ const form = createForm({
   title: "", 
   user: { firstName: "" }
 })
-	.schema(object({
+  .schema(object({
     title: string().between(3, 50),
     user: object({ firstName: string().between(3, 50) })
   }))
@@ -360,19 +360,19 @@ const form = createForm()
 		try {
       const result = await sendFormData(form.values.get())
       
-     	form.result.set({ success: "Data sent succefully", result })
+     	return  { success: "Data sent succefully", result }
     } catch (error) {
-      form.result.set({ error: "Could not send data" })
+      return { error: "Could not send data" }
     }
   })
 ```
 
-To provide meaningful feedback to form consumers you can use the `form.result` object. Any kind of feedback coming from a form handler, except validation messages, should go into the `form.result` object, those might be things like status messages, data received from an endpoint after creating an entity on the remote, etc. Everything can be statically typed, take a look at [quick start](#quick-start) to learn more about this.
+To provide meaningful feedback to form consumers, handler can return any kind of data, this data will be available as the result of a `submit()` call or inside the `form.result` observable property. Everything can be statically typed, take a look at [quick start](#quick-start) to learn more about this.
 
 When submitting a form, validations are run automatically, you can prevent this by configuring the form accordingly, see [form config](#form-config), or setting a flag.
 
 ```ts
-form.submit({ validate: false })
+const result = await form.submit({ validate: false })
 ```
 
 ## Reset form state

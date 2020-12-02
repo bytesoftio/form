@@ -18,7 +18,7 @@ export type CreateFormFields = (initialValue?: string[]) => ObservableFormFields
 export type CreateFormValues = <TValue extends object>(initialValue: TValue | undefined, dirtyFields: ObservableFormFields, changedFields: ObservableFormFields) => ObservableFormValues<TValue>
 export type FormValidator<TValue extends object, TResult extends object> = (form: ObservableForm<TValue, TResult>) => Promise<ValidationResult | undefined> | ValidationResult | undefined
 export type FormCallback<TValue extends object, TResult extends object> = (form: ObservableForm<TValue, TResult>) => void
-export type FormHandler<TValue extends object, TResult extends object> = (form: ObservableForm<TValue, TResult>) => Promise<any> | any
+export type FormHandler<TValue extends object, TResult extends object> = (form: ObservableForm<TValue, TResult>) => Promise<TResult | undefined> | TResult | undefined
 export type FormValidateOptions = { changedFieldsOnly?: boolean, keepPreviousErrors?: boolean, persistErrors?: boolean }
 export type FormSubmitOptions = { validate?: boolean }
 export type FormErrorsCallback = (newErrors: ValidationResult | undefined) => void
@@ -36,7 +36,7 @@ export type DepsOptions = {
 export type FormConfig<TValue extends object, TResult extends object> = {
   validators: FormValidator<TValue, TResult>[]
   schemas: ObjectSchema<TValue>[]
-  handlers: FormHandler<TValue, TResult>[]
+  handler: FormHandler<TValue, TResult> | undefined
   validateOnSubmit: boolean
   validateChangedFieldsOnly: boolean
   validateOnChange: boolean
@@ -96,7 +96,7 @@ export interface ObservableForm<TValue extends object = any, TResult extends obj
   submitting: ObservableValue<boolean>
   submitted: ObservableValue<boolean>
   errors: ObservableErrors
-  result: ObservableStore<TResult>
+  result: ObservableValue<TResult | undefined>
 
   reset(initialValues?: TValue): void
   submit(options?: FormSubmitOptions): Promise<boolean>
