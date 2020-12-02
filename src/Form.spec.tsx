@@ -405,6 +405,21 @@ describe("Form", () => {
     expect(errors7?.bar?.length).toBe(undefined)
   })
 
+  it("validates without persisting errors", async () => {
+    const form = new Form({ foo: "ba", bar: "ba" })
+      .schema(object({ foo: string().min(3), bar: string().min(3) }))
+
+    const errors1 = await form.validate({persistErrors: false})
+
+    expect(errors1 !== undefined).toBe(true)
+    expect(form.errors.get() !== undefined).toBe(false)
+
+    const errors2 = await form.validate()
+
+    expect(errors2 !== undefined).toBe(true)
+    expect(form.errors.get() !== undefined).toBe(true)
+  })
+
   it("tracks a field as dirty and changed", () => {
     const form = new Form({ foo: "bar" })
 

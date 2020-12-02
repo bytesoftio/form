@@ -19,7 +19,7 @@ export type CreateFormValues = <TValue extends object>(initialValue: TValue | un
 export type FormValidator<TValue extends object, TResult extends object> = (form: ObservableForm<TValue, TResult>) => Promise<ValidationResult | undefined> | ValidationResult | undefined
 export type FormCallback<TValue extends object, TResult extends object> = (form: ObservableForm<TValue, TResult>) => void
 export type FormHandler<TValue extends object, TResult extends object> = (form: ObservableForm<TValue, TResult>) => Promise<any> | any
-export type FormValidateOptions = { changedFieldsOnly?: boolean, keepPreviousErrors?: boolean }
+export type FormValidateOptions = { changedFieldsOnly?: boolean, keepPreviousErrors?: boolean, persistErrors?: boolean }
 export type FormSubmitOptions = { validate?: boolean }
 export type FormErrorsCallback = (newErrors: ValidationResult | undefined) => void
 

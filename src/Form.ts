@@ -20,6 +20,7 @@ import {
   ValidationResult,
 } from "@bytesoftio/schema"
 import { createStore, ObservableStore } from "@bytesoftio/store"
+import { isEmptyErrorsObject } from "./isEmptyErrorsObject"
 
 export class Form<TValues extends object = any, TResult extends object = any> implements ObservableForm<TValues, TResult> {
   config: FormConfig<TValues, TResult>
@@ -144,6 +145,7 @@ export class Form<TValues extends object = any, TResult extends object = any> im
   async validate(options?: FormValidateOptions): Promise<ValidationResult | undefined> {
     const changedFieldsOnly = options?.changedFieldsOnly === true || (this.config.validateChangedFieldsOnly && options?.changedFieldsOnly !== false)
     const keepPreviousErrors = options?.keepPreviousErrors !== false
+    const persistErrors = options?.persistErrors !== false
 
     const validatorErrors = await Promise.all(this.config.validators.map(async (validator, index) => {
       try {
@@ -188,9 +190,11 @@ export class Form<TValues extends object = any, TResult extends object = any> im
       })
     }
 
-    this.errors.set(newErrors)
+    if (persistErrors) {
+      this.errors.set(newErrors)
+    }
 
-    return this.errors.get()
+    return isEmptyErrorsObject(newErrors) ? undefined : newErrors
   }
 
   protected setupValidateOnChange() {
