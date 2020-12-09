@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@bytesoftio/helpers-promises": "^1.0.0",
-    "@bytesoftio/schema": "^3.5.1",
+    "@bytesoftio/schema": "^3.6.0",
     "@bytesoftio/store": "^3.0.0",
     "@bytesoftio/value": "^3.0.0",
     "lodash": "^4.17.15"
