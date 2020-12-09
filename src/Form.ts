@@ -109,9 +109,9 @@ export class Form<TValues extends object = any, TResult = any> implements Observ
     return this
   }
 
-  async submit(options?: FormSubmitOptions): Promise<boolean> {
+  async submit(options?: FormSubmitOptions): Promise<TResult | undefined> {
     if (this.submitting.get() === true) {
-      return false
+      return
     }
 
     const validate = options?.validate === true || (this.config.validateOnSubmit && options?.validate !== false)
@@ -127,7 +127,7 @@ export class Form<TValues extends object = any, TResult = any> implements Observ
       if (errors) {
         this.submitting.set(false)
 
-        return false
+        return
       }
     }
 
@@ -147,7 +147,7 @@ export class Form<TValues extends object = any, TResult = any> implements Observ
     this.submitting.set(false)
     this.submitted.set(true)
 
-    return true
+    return this.result.get()
   }
 
   async validate(options?: FormValidateOptions): Promise<ValidationResult | undefined> {

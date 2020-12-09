@@ -99,7 +99,7 @@ export interface ObservableForm<TValue extends object = any, TResult = any> {
   result: ObservableValue<TResult | undefined>
 
   reset(initialValues?: TValue): void
-  submit(options?: FormSubmitOptions): Promise<boolean>
+  submit(options?: FormSubmitOptions): Promise<TResult | undefined>
   validate(options?: FormValidateOptions): Promise<ValidationResult | undefined>
 
   configure(config: Partial<FormConfig<TValue, TResult>>): this

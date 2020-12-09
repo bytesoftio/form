@@ -286,7 +286,7 @@ describe("Form", () => {
 
     const status = (await form.submit())
 
-    expect(status).toBe(false)
+    expect(status).toBe(undefined)
     expect(handler).not.toHaveBeenCalled()
     expect(errors).toEqual([undefined, { foo: ["error"] }])
     expect(submitting).toEqual([false, true, false])
@@ -294,7 +294,7 @@ describe("Form", () => {
   })
 
   it("validates on submit and submits if there are no validation errors", async () => {
-    const handler = jest.fn()
+    const handler = jest.fn(() => "result")
     const form = new Form({ foo: "bar" })
       .configure({ validateOnSubmit: true })
       .validator(() => undefined)
@@ -317,7 +317,7 @@ describe("Form", () => {
 
     const status = (await form.submit())
 
-    expect(status).toBe(true)
+    expect(status).toBe("result")
     expect(handler).toHaveBeenCalled()
     expect(errors).toEqual([undefined])
     expect(submitting).toEqual([false, true, false])
